@@ -10,7 +10,7 @@ const emptyValues = {
   description: "",
 };
 
-function ProductForm({ initialValues, onSubmit, onCancel, isEditing = false }) {
+function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditing = false }) { 
   const [values, setValues] = useState(emptyValues);
 
   // useEffect: si cambia initialValues (prop), precargamos el formulario
