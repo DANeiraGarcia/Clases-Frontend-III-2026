@@ -2,7 +2,7 @@
 import styles from './ProductCard.module.css';
 import {useState} from 'react'
 
-function ProductCard({name,category,price,stock,image,description}) {
+function ProductCard({name,category,price,stock,image,description,onDelete}) {
     const [likes, setLikes] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
@@ -33,6 +33,15 @@ function ProductCard({name,category,price,stock,image,description}) {
                     >
                         {isLiked ? '❤' : '🤍'} {likes} Me gusta
                     </button>
+                    {
+                    onDelete ? (
+                     <div className={styles.cardActions}>
+                    <button type="button" className={styles.btnDelete} onClick={onDelete}>
+                     Eliminar
+                    </button>
+                    </div>
+                     ) : null
+                 }
                 </div>
             </div>
         </article>

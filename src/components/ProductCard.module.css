@@ -97,5 +97,21 @@
 }
 
 .btnLike.liked:hover {
-  background: #fecaca;
+  background: #e04141;
+}
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btnDelete {
+  background: #db0b0b;
+  color: rgb(233, 238, 240);
+  border: 2px solid #391aa8;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
 }

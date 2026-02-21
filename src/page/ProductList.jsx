@@ -1,6 +1,6 @@
 import { products } from '../data/Products';
 import ProductCard from '../components/ProductCard'; // cuando tiene default el nomre del componente es el que se importa y no va en llaves
-import styles from '../components/ProductCard.module.css';
+import styles from './ProductList.module.css';
 import { useState } from "react";
 import ProductForm from '../components/ProductForm';
 
@@ -13,6 +13,9 @@ function ProductList() {
     const [productsState, setProductsState] = useState(products);
     const handleAddProduct = (product) => {
         console.log("Producto recibido desde el form:", product);
+    };
+    const handleDeleteProduct = (id) => {
+    setProductsState((prev) => prev.filter((product) => product.id !== id));
     };
     
     return (
@@ -34,6 +37,7 @@ function ProductList() {
                 price={product.price}
                 image={product.image}
                 description={product.description}
+                onDelete={() => handleDeleteProduct(product.id)}
                 />
             ))}
             </div>
