@@ -29,7 +29,7 @@ function ProductCard({ name, category, price, stock, image, description, onDelet
             className={`${styles.btnLike} ${isLiked ? styles.liked : ''}`}
             onClick={handleLike}
           >
-            {isLiked ? '❤' : '🤍'} {likes} Me gusta
+            {isLiked ? '❤' : '🤍'} {likes} 
           </button>
            {
            onEdit||onDelete  ? (

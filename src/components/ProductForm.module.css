@@ -2,7 +2,7 @@
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--gray-200);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 3rem;
   margin-bottom: 1.5rem;
 }
 
@@ -69,8 +69,8 @@
   padding: 0.6rem 0.9rem;
   cursor: pointer;
   font-weight: 900;
-  background: var(--primary);
-  color: white;
+  background: rgb(197, 202, 200) ;
+  color: rgb(175, 38, 61);
 }
 
 .btnPrimary:hover {
