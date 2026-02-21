@@ -1,9 +1,15 @@
 import { products } from '../data/Products';
 import ProductCard from '../components/ProductCard'; // cuando tiene default el nomre del componente es el que se importa y no va en llaves
 import styles from '../components/ProductCard.module.css';
+import { useState } from "react";
+
+
+
 
 function ProductList() {
+  const [productsState, setProductsState] = useState(products);
   return (
+    
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>Productos Informaticos</h1>
@@ -12,7 +18,7 @@ function ProductList() {
         </p>
       </header>
       <div className={styles.grid}>
-        {products.map((product) => (
+        {productsState.map((product) => (
           <ProductCard
             key={product.id} // desde aca llamo el componente ProductCard y le paso las propiedades del producto
             name={product.name}
