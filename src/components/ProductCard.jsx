@@ -2,7 +2,7 @@
 import styles from './ProductCard.module.css';
 import {useState} from 'react'
 
-function ProductCard({name,category,price,image,description}) {
+function ProductCard({name,category,price,stock,image,description}) {
     const [likes, setLikes] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
@@ -24,6 +24,7 @@ function ProductCard({name,category,price,image,description}) {
                 <span className={styles.productCategory}>{category}</span>
                 <h3 className={styles.productName}>{name}</h3>
                 <p className={styles.productDescription}>{description}</p>
+                <p className={styles.productStock}>Stock: {stock}</p>
                 <div className={styles.productFooter}>
                     <span className={styles.productPrice}>${price.toFixed(2)}</span>
                     <button 

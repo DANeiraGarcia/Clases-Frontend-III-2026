@@ -51,6 +51,11 @@
   line-height: 1.5;
   flex: 1;
 }
+.productStock {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #374151;
+}
 
 .productFooter {
   display: flex;
