@@ -20,7 +20,11 @@ function ProductList() {
   };
 
   const handleAddProduct = (product) => {
-    console.log('Producto recibido desde el form:', product);
+    const newProduct = {
+      ...product,
+      id: Date.now(), // Genera un ID único usando timestamp
+    };
+    setProductsState((prev) => [...prev, newProduct]);
     handleCloseForm();
   };
 
