@@ -47,6 +47,9 @@ function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditin
     const price = Number(values.price);
     const stock = Number(values.stock);
 
+    const parsedRating = Number(initialValues?.rating ?? 3);
+    const rating = Number.isFinite(parsedRating) ? Math.min(5, Math.max(1, parsedRating)) : 3;
+
     if (!name) return;
     if (!Number.isFinite(price) || price <= 0) return;
     if (!Number.isFinite(stock) || stock < 0) return;
@@ -59,6 +62,7 @@ function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditin
       stock,
       image,
       description,
+      rating,
     });
 
     if (!isEditing) {

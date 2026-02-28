@@ -1,13 +1,30 @@
-import { products } from '../data/Products';
+import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard'; // cuando tiene default el nombre del componente es el que se importa y no va en llaves
-import styles from './ProductList.module.css';
-import { useState } from 'react';
 import ProductForm from '../components/ProductForm';
+import styles from './ProductList.module.css';
+import { loadProducts, PRODUCTS_STORAGE_KEY } from '../Utils/productStorage';
+import ProductDetailsModal from '../components/ProductDetailsModal';
+
+ // se importa la función para cargar los productos y la constante con el nombre de la clave de almacenamiento
+
+const STORAGE_KEY = PRODUCTS_STORAGE_KEY;
 
 function ProductList() {
-  const [productsState, setProductsState] = useState(products);
+  const [productsState, setProductsState] = useState(loadProducts); //productsState es el estado local que se inicializa con los productos cargados desde el almacenamiento local o los productos semilla si no hay datos almacenados
   const [editingProduct, setEditingProduct] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(productsState));
+    } catch (error) {
+      void error;
+    }
+  }, [productsState]);
 
   const handleOpenCreate = () => {
     setEditingProduct(null);
@@ -20,16 +37,22 @@ function ProductList() {
   };
 
   const handleAddProduct = (product) => {
-    const newProduct = {
-      ...product,
-      id: Date.now(), // Genera un ID único usando timestamp
-    };
-    setProductsState((prev) => [...prev, newProduct]);
+    setProductsState((prev) => {
+      const maxId = prev.reduce((acc, item) => Math.max(acc, item.id), 0);
+      const nextId = maxId + 1;
+
+      return [...prev, { ...product, id: nextId }];
+    });
+
     handleCloseForm();
   };
 
   const handleDeleteProduct = (id) => {
     setProductsState((prev) => prev.filter((product) => product.id !== id));
+
+    if (editingProduct?.id === id) {
+      handleCloseForm();
+    }
   };
 
   const handleEditStart = (product) => {
@@ -37,24 +60,20 @@ function ProductList() {
     setIsFormOpen(true);
   };
 
-  const handleEditCancel = () => {
-    setEditingProduct(null);
-    handleCloseForm();
-  };
-
   const handleEditSubmit = (updatedProduct) => {
     setProductsState((prev) =>
       prev.map((product) => (product.id === updatedProduct.id ? updatedProduct : product))
     );
-    setEditingProduct(null);
     handleCloseForm();
   };
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Lista de Productos</h1>
-        <p className={styles.description}>Explora nuestra selección de productos!</p>
+        <h1 className={styles.title}>Productos Informáticos</h1>
+        <p className={styles.subtitle}>
+          Encuentra los mejores productos de tecnología para tu setup
+        </p>
       </header>
 
       {isFormOpen ? (
@@ -79,6 +98,7 @@ function ProductList() {
                 name={product.name}
                 category={product.category}
                 price={product.price}
+                rating={product.rating}
                 stock={product.stock}
                 image={product.image}
                 description={product.description}
