@@ -36,7 +36,7 @@ function ProductCard({ name, category, price, stock, image, description, rating,
 
           </button>
            {
-           onEdit||onDelete  ? (
+           onDetails||onEdit||onDelete  ? (
             <div className={styles.cardActions}>
               {onDetails ? (
               <button type="button" className={styles.btnDetails} onClick={onDetails}>

@@ -1,9 +1,9 @@
-import styles from "./Navbar.module.css";
+import styles from './Navbar.module.css';
 
-import logo from "../assets/react.svg";
+import logo from '../assets/react.svg';
 
 function Navbar({ activePage, onNavigate, user, onSignIn, onSignOut }) {
-  const userLabel = user?.name ?? "Invitado";
+  const userLabel = user?.name ?? 'Invitado';
   const isLoggedIn = Boolean(user);
 
   return (
@@ -16,22 +16,22 @@ function Navbar({ activePage, onNavigate, user, onSignIn, onSignOut }) {
       <div className={styles.links}>
         <button
           type="button"
-          className={`${styles.link} ${activePage === "home" ? styles.active : ""}`}
-          onClick={() => onNavigate("home")}
+          className={`${styles.link} ${activePage === 'home' ? styles.active : ''}`}
+          onClick={() => onNavigate('home')}
         >
           Inicio
         </button>
         <button
           type="button"
-          className={`${styles.link} ${activePage === "products" ? styles.active : ""}`}
-          onClick={() => onNavigate("products")}
+          className={`${styles.link} ${activePage === 'products' ? styles.active : ''}`}
+          onClick={() => onNavigate('products')}
         >
           Productos
         </button>
         <button
           type="button"
-          className={`${styles.link} ${activePage === "cart" ? styles.active : ""}`}
-          onClick={() => onNavigate("cart")}
+          className={`${styles.link} ${activePage === 'cart' ? styles.active : ''}`}
+          onClick={() => onNavigate('cart')}
         >
           Carrito
         </button>

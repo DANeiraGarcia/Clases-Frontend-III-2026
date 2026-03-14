@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard'; // cuando tiene default el nombre del componente es el que se importa y no va en llaves
 import ProductForm from '../components/ProductForm';
 import styles from './ProductList.module.css';
-import { loadProducts, PRODUCTS_STORAGE_KEY } from '../Utils/productStorage';
+import { loadProducts, PRODUCTS_STORAGE_KEY } from '../utils/productStorage';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 
  // se importa la función para cargar los productos y la constante con el nombre de la clave de almacenamiento
@@ -11,7 +11,7 @@ const STORAGE_KEY = PRODUCTS_STORAGE_KEY;
 
 function ProductList() {
   const [productsState, setProductsState] = useState(loadProducts); //productsState es el estado local que se inicializa con los productos cargados desde el almacenamiento local o los productos semilla si no hay datos almacenados
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null); 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
