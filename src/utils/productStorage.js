@@ -1,6 +1,8 @@
-import { products as seedProducts } from '../data/products';
+import { products as seedProducts } from '../data/Products';
 
 const STORAGE_KEY = 'products';
+const VERSION_KEY = 'products_version';
+const STORAGE_VERSION = seedProducts.length;
 const DEFAULT_RATING = 3;
 
 const seedById = new Map(seedProducts.map((product) => [product.id, product]));

@@ -4,6 +4,7 @@ import styles from "../components/ProductForm.module.css";
 const emptyValues = {
   name: "",
   category: "",
+  rating: "", 
   price: "",
   stock: "",
   image: "",
@@ -19,6 +20,7 @@ function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditin
       setValues({
         name: initialValues.name ?? "",
         category: initialValues.category ?? "",
+        rating: initialValues.rating ?? "",
         price: initialValues.price ?? "",
         stock: initialValues.stock ?? "",
         image: initialValues.image ?? "",
@@ -47,8 +49,7 @@ function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditin
     const price = Number(values.price);
     const stock = Number(values.stock);
 
-    const parsedRating = Number(initialValues?.rating ?? 3);
-    const rating = Number.isFinite(parsedRating) ? Math.min(5, Math.max(1, parsedRating)) : 3;
+    const rating = Math.min(5, Math.max(1, Number(values.rating) || 3));
 
     if (!name) return;
     if (!Number.isFinite(price) || price <= 0) return;
@@ -103,6 +104,20 @@ function ProductForm({ initialValues = null, onSubmit, onCancel = null, isEditin
             placeholder="Ej: Accesorios"
           />
         </label>
+        <label className={styles.field}>
+  <span className={styles.label}>Calificación</span>
+  <input
+    className={styles.input}
+    name="rating"
+    type="number"
+    min="1"
+    max="5"
+    step="0.1"
+    value={values.rating}
+    onChange={handleChange}
+    placeholder="Ej: 4.5"
+  />
+</label>
 
         <div className={styles.row}>
           <label className={styles.field}>

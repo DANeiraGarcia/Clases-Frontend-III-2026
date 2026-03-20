@@ -1,4 +1,3 @@
-// se coloca el export para poder importar el arreglo en otros archivos
 export const products = [
   {
     id: 1,
@@ -20,7 +19,7 @@ export const products = [
     image: "https://images.pexels.com/photos/11216260/pexels-photo-11216260.jpeg",
     description: "A latest model smartphone with cutting-edge features."
   },
-    {
+  {
     id: 3,
     name: "Headphones",
     category: "Electronics",
@@ -30,7 +29,7 @@ export const products = [
     image: "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg",
     description: "Noise-cancelling headphones for an immersive audio experience."
   },
-    {
+  {
     id: 4,
     name: "Tablet",
     category: "Electronics",
@@ -40,8 +39,26 @@ export const products = [
     image: "https://images.pexels.com/photos/6373045/pexels-photo-6373045.jpeg",
     description: "A portable tablet for entertainment and productivity."
   },
-   
-  
-]
+  {
+    id: 5,
+    name: "Teclado",
+    category: "Accesorios",
+    rating: 4.8,
+    price: 150,
+    stock: 5,
+    image: "https://images.pexels.com/photos/7531569/pexels-photo-7531569.jpeg",
+    description: "Un teclado mecánico de alta calidad para una experiencia de escritura superior."
+  },
+  {
+    id: 5,
+    name: "Monitor",
+    category: "Monitores",
+    rating: 4.8,
+    price: 200,
+    stock: 5,
+    image: "https://images.pexels.com/photos/5082554/pexels-photo-5082554.jpeg",
+    description: "Un monitor de alta calidad para una experiencia de visualización superior."
+  }
+];
      
     
