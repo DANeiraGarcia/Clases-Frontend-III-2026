@@ -6,11 +6,16 @@ import styles from '../page/CategoryProducts.module.css';
 import productListStyles from '../page/ProductList.module.css';
 import { loadProducts } from '../utils/productStorage';
 
-function CategoryProducts({ category, onBack }) {
+function CategoryProducts({ category, onBack, cartItems, onAddToCart }) {
   const [query, setQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productsState] = useState(loadProducts);
+
+  const cartQuantityByProductId = useMemo(
+    () => new Map(cartItems.map((item) => [item.id, item.quantity])),
+    [cartItems]
+  );
 
   const filteredProducts = useMemo(() => {
     if (!category) return [];
@@ -68,6 +73,7 @@ function CategoryProducts({ category, onBack }) {
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
+              id={product.id}
               name={product.name}
               category={product.category}
               rating={product.rating}
@@ -75,6 +81,8 @@ function CategoryProducts({ category, onBack }) {
               stock={product.stock}
               image={product.image}
               description={product.description}
+              onAddToCart={onAddToCart}
+              disableAddToCart={(cartQuantityByProductId.get(product.id) ?? 0) >= product.stock}
               onDetails={() => handleOpenDetails(product)}
             />
           ))}
