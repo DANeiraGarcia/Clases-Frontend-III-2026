@@ -1,16 +1,16 @@
 import styles from './ProductCard.module.css';
 import { useState } from 'react';
 
-function ProductCard({ name, category, price, stock, image, description, rating,onDetails, onDelete, onEdit }) {
+function ProductCard({ id, name, category, price, stock, image, description, rating, onDetails, onDelete, onEdit, onAddToCart, disableAddToCart = false }) {
   const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLike = () => {
     if (isLiked) {
-      setLikes(likes - 1); // resta 1 y lo pone en falso y esto se llama hook
+      setLikes(likes - 1);
       setIsLiked(false);
     } else {
-      setLikes(likes + 1); // se controlan los estados de los likes y si el producto esta o no likeado
+      setLikes(likes + 1);
       setIsLiked(true);
     }
   };
@@ -32,17 +32,28 @@ function ProductCard({ name, category, price, stock, image, description, rating,
             className={`${styles.btnLike} ${isLiked ? styles.liked : ''}`}
             onClick={handleLike}
           >
-            {isLiked ? '❤' : '🤍'} {likes} 
-
+            {isLiked ? '❤' : '🤍'} {likes}
           </button>
-           {
-           onDetails||onEdit||onDelete  ? (
+
+          {onAddToCart || onDetails || onEdit || onDelete ? (
             <div className={styles.cardActions}>
+              {onAddToCart ? (
+                <button
+                  type="button"
+                  className={styles.btnAddToCart}
+                  onClick={() => onAddToCart({ id, name, category, price, stock, image })}
+                  disabled={disableAddToCart}
+                >
+                  {disableAddToCart ? 'Stock agotado en carrito' : 'Agregar al carrito'}
+                </button>
+              ) : null}
+
               {onDetails ? (
-              <button type="button" className={styles.btnDetails} onClick={onDetails}>
-                Más información
-              </button>
-            ) : null}
+                <button type="button" className={styles.btnDetails} onClick={onDetails}>
+                  Más información
+                </button>
+              ) : null}
+
               {onEdit ? (
                 <button type="button" className={styles.btnEdit} onClick={onEdit}>
                   Editar
@@ -55,8 +66,7 @@ function ProductCard({ name, category, price, stock, image, description, rating,
                 </button>
               ) : null}
             </div>
-          ) : null
-        }
+          ) : null}
         </div>
       </div>
     </article>
