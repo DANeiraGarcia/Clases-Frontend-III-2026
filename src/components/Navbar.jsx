@@ -1,7 +1,14 @@
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import logo from '../assets/react.svg';
 
-function Navbar({ activePage, onNavigate, user, onSignIn, onSignOut, cartItemCount = 0 }) {
+// elimina activePage y onNavigate, agrega cartItemCount
+function Navbar({ user, onSignIn, onSignOut, cartItemCount = 0 }) {
+  // reemplaza onNavigate
+  const navigate = useNavigate();
+  // reemplaza activePage
+  const location = useLocation();
+
   const userLabel = user?.name ?? 'Invitado';
   const isLoggedIn = Boolean(user);
 
@@ -15,24 +22,27 @@ function Navbar({ activePage, onNavigate, user, onSignIn, onSignOut, cartItemCou
       <div className={styles.links}>
         <button
           type="button"
-          className={`${styles.link} ${activePage === 'home' ? styles.active : ''}`}
-          onClick={() => onNavigate('home')}
+          // location.pathname reemplaza activePage === 'home'
+          className={`${styles.link} ${location.pathname === '/' ? styles.active : ''}`}
+          // navigate reemplaza onNavigate('home')
+          onClick={() => navigate('/')}
         >
           Inicio
         </button>
         <button
           type="button"
-          className={`${styles.link} ${activePage === 'products' ? styles.active : ''}`}
-          onClick={() => onNavigate('products')}
+          className={`${styles.link} ${location.pathname === '/products' ? styles.active : ''}`}
+          onClick={() => navigate('/products')}
         >
           Productos
         </button>
         <button
           type="button"
-          className={`${styles.link} ${activePage === 'cart' ? styles.active : ''}`}
-          onClick={() => onNavigate('cart')}
+          className={`${styles.link} ${location.pathname === '/cart' ? styles.active : ''}`}
+          onClick={() => navigate('/cart')}
         >
           Carrito
+          {/* badge del carrito, solo aparece si hay items */}
           {cartItemCount > 0 ? <span className={styles.cartBadge}>{cartItemCount}</span> : null}
         </button>
       </div>

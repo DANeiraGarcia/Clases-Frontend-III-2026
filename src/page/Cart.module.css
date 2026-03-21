@@ -166,7 +166,7 @@
 .btnRemove {
   padding: 0.6rem 0.9rem;
   background: var(--danger);
-  color: white;
+  color: rgb(128, 120, 120);
 }
 
 .btnRemove:hover {
@@ -216,7 +216,7 @@
   margin-top: 1.25rem;
   padding: 0.85rem 1rem;
   background: var(--gray-900);
-  color: white;
+  color: rgb(97, 93, 93);
 }
 
 .btnClear:hover:not(:disabled) {

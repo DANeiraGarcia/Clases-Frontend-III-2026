@@ -50,7 +50,7 @@ export const products = [
     description: "Un teclado mecánico de alta calidad para una experiencia de escritura superior."
   },
   {
-    id: 5,
+    id: 6,
     name: "Monitor",
     category: "Monitores",
     rating: 4.8,

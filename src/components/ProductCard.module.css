@@ -134,3 +134,22 @@
 .btnDetails:hover {
   background: var(--gray-200);
 }
+.btnAddToCart {
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  cursor: pointer;
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.btnAddToCart:hover:not(:disabled) {
+  background: #a7f3d0;
+}
+
+.btnAddToCart:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

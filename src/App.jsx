@@ -1,44 +1,26 @@
-import { useEffect, useMemo, useState } from 'react'; //useEffect
+import { useEffect, useMemo, useState } from 'react';
 
 import Footer from './components/Footer';
 import Header from './components/Header';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Cart from './page/Cart';
 import CategoryProducts from './page/CategoryProducts';
 import Home from './page/Home';
 import ProductList from './page/ProductList';
-import { CART_STORAGE_KEY, loadCartItems } from './utils/cartStorage'; 
+import { CART_STORAGE_KEY, loadCartItems } from './utils/cartStorage';
 
 import './App.css';
 
 function App() {
-  const [activePage, setActivePage] = useState('home');
   const [user, setUser] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [cartItems, setCartItems] = useState(loadCartItems); 
+  const [cartItems, setCartItems] = useState(loadCartItems);
 
-  
+  // guarda el carrito en localStorage cada vez que cambia
   useEffect(() => {
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const handleNavigate = (page) => {
-    setActivePage(page);
-    if (page !== 'category') {
-      setSelectedCategory(null);
-    }
-  };
-
-  const handleOpenCategory = (category) => {
-    setSelectedCategory(category);
-    setActivePage('category');
-  };
-
-  const handleBackFromCategory = () => {
-    setSelectedCategory(null);
-    setActivePage('home');
-  };
-
-  
+  // agregar producto al carrito
   const handleAddToCart = (product) => {
     if (!product || !Number.isFinite(Number(product.id))) return;
 
@@ -72,7 +54,7 @@ function App() {
     });
   };
 
-  //  actualizar cantidad
+  // actualizar cantidad
   const handleUpdateCartItemQuantity = (productId, nextQuantity) => {
     setCartItems((currentItems) =>
       currentItems.flatMap((item) => {
@@ -90,7 +72,7 @@ function App() {
     setCartItems((currentItems) => currentItems.filter((item) => item.id !== productId));
   };
 
-  //  vaciar carrito
+  // vaciar carrito
   const handleClearCart = () => {
     setCartItems([]);
   };
@@ -101,51 +83,46 @@ function App() {
     [cartItems]
   );
 
-  const page = useMemo(() => {
-    if (activePage === 'category') {
-      return (
-        <CategoryProducts
-          category={selectedCategory}
-          onBack={handleBackFromCategory}
-          cartItems={cartItems}           
-          onAddToCart={handleAddToCart}   
-        />
-      );
-    }
-    if (activePage === 'products') return <ProductList />;
-    if (activePage === 'cart') {
-      return (
-        <Cart
-          cartItems={cartItems}                          
-          onUpdateQuantity={handleUpdateCartItemQuantity} 
-          onRemoveItem={handleRemoveCartItem}             
-          onClearCart={handleClearCart}                   
-          onContinueShopping={() => setActivePage('home')}
-        />
-      );
-    }
-
-    return <Home onOpenCategory={handleOpenCategory} />;
-  }, [activePage, cartItems, selectedCategory]);
-
   const handleSignIn = () => setUser({ name: 'Usuario' });
   const handleSignOut = () => setUser(null);
 
   return (
-    <div className="app">
-      <Header
-        activePage={activePage}
-        onNavigate={handleNavigate}
-        user={user}
-        onSignIn={handleSignIn}
-        onSignOut={handleSignOut}
-        cartItemCount={cartItemCount} 
-      />
+    <BrowserRouter>
+      <div className="app">
+        <Header
+          user={user}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
+          cartItemCount={cartItemCount}
+        />
 
-      <main className="main">{page}</main>
+        <main className="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/category/:categoryName"
+              element={<CategoryProducts cartItems={cartItems} onAddToCart={handleAddToCart} />}
+            />
+            <Route path="/products" element={<ProductList />} />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cartItems={cartItems}
+                  onUpdateQuantity={handleUpdateCartItemQuantity}
+                  onRemoveItem={handleRemoveCartItem}
+                  onClearCart={handleClearCart}
+                  onContinueShopping={() => window.history.back()}
+                />
+              }
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </BrowserRouter>
   );
 }
 

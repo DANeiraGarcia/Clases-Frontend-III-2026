@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom'; // agrega useNavigate
 import homeStyles from '../page/Home.module.css';
 import { loadProducts } from '../utils/productStorage';
 
-function Home({ onOpenCategory }) {
+// elimina prop onOpenCategory y reempláza por useNavigate
+function Home() {
+  // reemplaza onOpenCategory por useNavigate
+  const navigate = useNavigate();
   const [productsState] = useState(loadProducts);
 
   const categoryTiles = useMemo(() => {
-    const bestByCategory = new Map();  //buscar mejor categoria
+    const bestByCategory = new Map();
 
     for (const product of productsState) {
       const category = product.category ?? 'Sin categoría';
@@ -29,7 +32,7 @@ function Home({ onOpenCategory }) {
       }
     }
 
-    return Array.from(bestByCategory.entries()) // funcion que retorna cual es el producto de mejor categoria
+    return Array.from(bestByCategory.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([category, data]) => ({ category, product: data.product }));
   }, [productsState]);
@@ -47,11 +50,12 @@ function Home({ onOpenCategory }) {
             key={category}
             type="button"
             className={homeStyles.categoryTile}
-            onClick={() => onOpenCategory?.(category)}
+            // navigate reemplaza onOpenCategory?.(category)
+            onClick={() => navigate(`/category/${category}`)}
             aria-label={`Ver productos de ${category}`}
           >
             <img className={homeStyles.categoryImage} src={product.image} alt={product.name} />
-            <span className={homeStyles.categoryLabel}aria-hidden="true">
+            <span className={homeStyles.categoryLabel} aria-hidden="true">
               <span className={homeStyles.categoryLabelText}>{category}</span>
             </span>
           </button>
