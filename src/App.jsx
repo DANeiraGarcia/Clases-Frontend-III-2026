@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import Footer from './components/Footer';
 import Header from './components/Header';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Cart from './page/Cart';
 import CategoryProducts from './page/CategoryProducts';
 import Home from './page/Home';
 import ProductList from './page/ProductList';
+import Checkout from './page/Checkout';
+import OrderConfirmation from './page/OrderConfirmation';
 import { CART_STORAGE_KEY, loadCartItems } from './utils/cartStorage';
 import {
   calculateOrderTotals,
@@ -14,16 +16,11 @@ import {
   getShippingOptionById,
 } from './utils/calculateOrderTotals';
 import { saveOrder } from './utils/ordersStorage';
-import Checkout from './pages/Checkout';
-import OrderConfirmation from './pages/OrderConfirmation';
 
 import './App.css';
 
-
 function App() {
-  const [activePage, setActivePage] = useState('home');
   const [user, setUser] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
 
@@ -31,18 +28,52 @@ function App() {
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
 
-  /* lógica existente del carrito */
-
-  const handleStartCheckout = () => {
-    setActivePage('checkout');
+  const handleAddToCart = (product) => {
+    if (!product || !Number.isFinite(Number(product.id))) return;
+    setCartItems((currentItems) => {
+      const existingItem = currentItems.find((item) => item.id === product.id);
+      const stock =
+        Number.isFinite(Number(product.stock)) && Number(product.stock) > 0
+          ? Number(product.stock) : 1;
+      if (!existingItem) {
+        return [...currentItems, {
+          id: Number(product.id),
+          name: product.name,
+          category: product.category,
+          price: Number(product.price) || 0,
+          stock,
+          image: product.image,
+          quantity: 1,
+        }];
+      }
+      return currentItems.map((item) =>
+        item.id !== product.id
+          ? item
+          : { ...item, stock, quantity: Math.min(item.quantity + 1, stock) }
+      );
+    });
   };
 
-  const handleCompleteCheckout = ({ customer, shippingMethodId, paymentMethodId }) => {
-    if (cartItems.length === 0) {
-      setActivePage('cart');
-      return;
-    }
+  const handleUpdateCartItemQuantity = (productId, nextQuantity) => {
+    setCartItems((currentItems) =>
+      currentItems.flatMap((item) => {
+        if (item.id !== productId) return [item];
+        const stock =
+          Number.isFinite(Number(item.stock)) && Number(item.stock) > 0 ? Number(item.stock) : 1;
+        const normalizedQuantity = Math.max(1, Math.min(stock, Math.floor(Number(nextQuantity) || 1)));
+        return normalizedQuantity > 0 ? [{ ...item, quantity: normalizedQuantity }] : [];
+      })
+    );
+  };
 
+  const handleRemoveCartItem = (productId) => {
+    setCartItems((currentItems) => currentItems.filter((item) => item.id !== productId));
+  };
+
+  const handleClearCart = () => setCartItems([]);
+
+  const handleCompleteCheckout = ({ customer, shippingMethodId, paymentMethodId }) => {
+    if (cartItems.length === 0) return;
     const totals = calculateOrderTotals(cartItems, shippingMethodId);
     const order = {
       id: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
@@ -53,39 +84,90 @@ function App() {
       paymentMethod: getPaymentMethodById(paymentMethodId),
       totals,
     };
-
     saveOrder(order);
     setLatestOrder(order);
     setCartItems([]);
-    setActivePage('order-confirmation');
   };
 
-  const handleBackHomeAfterOrder = () => {
-    setLatestOrder(null);
-    setSelectedCategory(null);
-    setActivePage('home');
-  };
+  const cartItemCount = useMemo(
+    () => cartItems.reduce((total, item) => total + item.quantity, 0),
+    [cartItems]
+  );
 
-  let page = <Home onOpenCategory={handleOpenCategory} />;
+  const handleSignIn = () => setUser({ name: 'Usuario' });
+  const handleSignOut = () => setUser(null);
 
-  if (activePage === 'category') {
-    page = <CategoryProducts /* props */ />;
-  } else if (activePage === 'products') {
-    page = <ProductList />;
-  } else if (activePage === 'cart') {
-    page = <Cart /* props */ />;
-  } else if (activePage === 'checkout') {
-    page = <Checkout /* props */ />;
-  } else if (activePage === 'order-confirmation') {
-    page = <OrderConfirmation /* props */ />;
+  // componente interno pequeño solo para usar useNavigate
+  function InnerApp() {
+    const navigate = useNavigate();
+
+    return (
+      <div className="app">
+        <Header
+          user={user}
+          onSignIn={handleSignIn}
+          onSignOut={handleSignOut}
+          cartItemCount={cartItemCount}
+        />
+        <main className="main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/category/:categoryName"
+              element={<CategoryProducts cartItems={cartItems} onAddToCart={handleAddToCart} />}
+            />
+            <Route path="/products" element={<ProductList />} />
+            <Route
+              path="/cart"
+              element={
+                <Cart
+                  cartItems={cartItems}
+                  onUpdateQuantity={handleUpdateCartItemQuantity}
+                  onRemoveItem={handleRemoveCartItem}
+                  onClearCart={handleClearCart}
+                  onContinueShopping={() => navigate('/')}
+                  onProceedToCheckout={() => navigate('/checkout')}
+                />
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <Checkout
+                  cartItems={cartItems}
+                  user={user}
+                  onBack={() => navigate('/cart')}
+                  onCompleteCheckout={(data) => {
+                    handleCompleteCheckout(data);
+                    navigate('/order-confirmation');
+                  }}
+                />
+              }
+            />
+            <Route
+              path="/order-confirmation"
+              element={
+                <OrderConfirmation
+                  order={latestOrder}
+                  onBackHome={() => {
+                    setLatestOrder(null);
+                    navigate('/');
+                  }}
+                />
+              }
+            />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   return (
-    <div className="app">
-      <Header /* props */ />
-      <main className="main">{page}</main>
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <InnerApp />
+    </BrowserRouter>
   );
 }
 

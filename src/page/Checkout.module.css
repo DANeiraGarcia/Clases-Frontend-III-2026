@@ -1,0 +1,256 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  margin: 0;
+  color: white;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  color: rgba(255,255,255,0.9);
+  font-weight: 700;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;  /* ← evita que el form se desborde */
+}
+
+.fieldset {
+  border: none;
+  margin: 0;        
+  padding: 2.5rem;
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(22,30,84,0.1);
+  box-sizing: border-box;
+  width: 100%;  
+  position: relative;    
+}
+
+.legend {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--gray-900);
+  margin: 0 0 1rem 0;
+  padding: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.input {
+  padding: 0.65rem 0.85rem;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--primary);
+}
+
+.inputError {
+  border-color: var(--danger);
+}
+
+.error {
+  font-size: 0.8rem;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.optionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.optionCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.optionSelected {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+.radioInput {
+  accent-color: var(--primary);
+}
+
+.optionInfo {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.optionName {
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.optionPrice {
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.primaryButton {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  filter: brightness(0.95);
+}
+
+.secondaryButton {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: var(--primary-dark);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: var(--gray-100);
+}
+
+.summary {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(22,30,84,0.1);
+}
+
+.summaryTitle {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--gray-900);
+}
+
+.summaryItems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--gray-900);
+}
+
+.summaryItemName {
+  font-weight: 700;
+}
+
+.summaryItemPrice {
+  font-weight: 800;
+}
+
+.summaryRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+.summaryTotal {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--gray-200);
+  color: var(--gray-900);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.emptyState {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(22,30,84,0.1);
+}
+
+.emptyText {
+  margin: 0 0 1.5rem;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
