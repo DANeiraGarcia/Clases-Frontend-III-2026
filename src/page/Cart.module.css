@@ -274,4 +274,26 @@
   .actions {
     align-items: stretch;
   }
+  .btnContinue,
+.btnClear,
+.btnCheckout,
+.btnRemove,
+.btnQuantity {
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btnCheckout {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.95rem 1rem;
+  background: var(--primary);
+  color: white;
+}
+
+.btnCheckout:hover {
+  background: var(--primary-dark);
+}
 }
