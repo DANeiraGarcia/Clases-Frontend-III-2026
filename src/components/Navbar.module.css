@@ -61,11 +61,20 @@
   font-weight: 700;
   color: var(--gray-900);
 }
+.brandBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+}
 
 .authBtn {
   border: none;
   background: var(--primary);
-  color: gray;
+  color: rgb(243, 238, 238);
   cursor: pointer;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;

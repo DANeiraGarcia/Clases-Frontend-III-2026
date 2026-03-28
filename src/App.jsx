@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-
+import { loadCurrentUser, logoutUser } from './utils/userStorage';
+import Register from './page/Register';
+import UserProfile from './page/UserProfile';
+import UserOrders from './page/UserOrders';
+import OrderDetail from './page/OrderDetail';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Cart from './page/Cart';
@@ -20,7 +24,7 @@ import { saveOrder } from './utils/ordersStorage';
 import './App.css';
 
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(loadCurrentUser);
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
 
@@ -94,8 +98,11 @@ function App() {
     [cartItems]
   );
 
-  const handleSignIn = () => setUser({ name: 'Usuario' });
-  const handleSignOut = () => setUser(null);
+  const handleSignIn = (userData) => setUser(userData);
+const handleSignOut = () => {
+  logoutUser();
+  setUser(null);
+};
 
   // componente interno pequeño solo para usar useNavigate
   function InnerApp() {
@@ -105,59 +112,65 @@ function App() {
       <div className="app">
         <Header
           user={user}
-          onSignIn={handleSignIn}
           onSignOut={handleSignOut}
           cartItemCount={cartItemCount}
         />
         <main className="main">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/category/:categoryName"
-              element={<CategoryProducts cartItems={cartItems} onAddToCart={handleAddToCart} />}
-            />
-            <Route path="/products" element={<ProductList />} />
-            <Route
-              path="/cart"
-              element={
-                <Cart
-                  cartItems={cartItems}
-                  onUpdateQuantity={handleUpdateCartItemQuantity}
-                  onRemoveItem={handleRemoveCartItem}
-                  onClearCart={handleClearCart}
-                  onContinueShopping={() => navigate('/')}
-                  onProceedToCheckout={() => navigate('/checkout')}
-                />
-              }
-            />
-            <Route
-              path="/checkout"
-              element={
-                <Checkout
-                  cartItems={cartItems}
-                  user={user}
-                  onBack={() => navigate('/cart')}
-                  onCompleteCheckout={(data) => {
-                    handleCompleteCheckout(data);
-                    navigate('/order-confirmation');
-                  }}
-                />
-              }
-            />
-            <Route
-              path="/order-confirmation"
-              element={
-                <OrderConfirmation
-                  order={latestOrder}
-                  onBackHome={() => {
-                    setLatestOrder(null);
-                    navigate('/');
-                  }}
-                />
-              }
-            />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+  <Route path="/" element={<Home />} />
+  <Route
+    path="/category/:categoryName"
+    element={<CategoryProducts cartItems={cartItems} onAddToCart={handleAddToCart} />}
+  />
+  <Route path="/products" element={<ProductList />} />
+  <Route
+    path="/cart"
+    element={
+      <Cart
+        cartItems={cartItems}
+        onUpdateQuantity={handleUpdateCartItemQuantity}
+        onRemoveItem={handleRemoveCartItem}
+        onClearCart={handleClearCart}
+        onContinueShopping={() => navigate('/')}
+        onProceedToCheckout={() => navigate('/checkout')}
+      />
+    }
+  />
+  <Route
+    path="/checkout"
+    element={
+      <Checkout
+        cartItems={cartItems}
+        user={user}
+        onBack={() => navigate('/cart')}
+        onCompleteCheckout={(data) => {
+          handleCompleteCheckout(data);
+          navigate('/order-confirmation');
+        }}
+      />
+    }
+  />
+  <Route
+    path="/order-confirmation"
+    element={
+      <OrderConfirmation
+        order={latestOrder}
+        onBackHome={() => {
+          setLatestOrder(null);
+          navigate('/');
+        }}
+      />
+    }
+  />
+  <Route path="/register" element={<Register onLogin={handleSignIn} />} />
+  <Route
+    path="/user/profile"
+    element={<UserProfile user={user} onSignIn={() => navigate('/register')} onSignOut={handleSignOut} />}
+  />
+  <Route path="/user/orders" element={<UserOrders />} />
+  <Route path="/user/orders/:orderId" element={<OrderDetail />} />
+  <Route path="*" element={<Navigate to="/" />} /> 
+</Routes>
         </main>
         <Footer />
       </div>

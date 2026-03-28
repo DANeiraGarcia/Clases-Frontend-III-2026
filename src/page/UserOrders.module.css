@@ -1,0 +1,129 @@
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.title {
+  margin: 0;
+  color: white;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0;
+  color: rgba(255,255,255,0.9);
+  font-weight: 700;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.orderCard {
+  background: rgba(255,255,255,0.95);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(22,30,84,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.orderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.orderId {
+  font-weight: 900;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.orderDate {
+  color: var(--gray-500);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.orderMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.orderItems {
+  color: var(--gray-500);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.orderTotal {
+  font-weight: 900;
+  color: var(--gray-900);
+  font-size: 1.1rem;
+}
+
+.empty {
+  background: rgba(255,255,255,0.95);
+  border-radius: 18px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(22,30,84,0.1);
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--gray-900);
+}
+
+.emptyText {
+  margin: 0.75rem 0 1.5rem;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+.primaryButton {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  filter: brightness(0.95);
+}
+
+.secondaryButton {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 10px;
+  background: white;
+  color: var(--primary);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  background: var(--gray-100);
+}
