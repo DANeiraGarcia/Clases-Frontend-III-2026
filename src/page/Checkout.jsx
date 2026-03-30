@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import styles from '../page/Checkout.module.css';
+import styles from '../page/styles/Checkout.module.css';
 import {
   calculateOrderTotals,
   PAYMENT_METHODS,

@@ -1,4 +1,4 @@
-import styles from "./Header.module.css";
+import styles from "./styles/Header.module.css";
 import Navbar from "./Navbar";
 
 function Header({ activePage, onNavigate, user, onSignIn, onSignOut, cartItemCount }) {

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { loadOrders } from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
-import styles from '../page/UserOrders.module.css';
+import styles from '../page/styles/UserOrders.module.css';
 
 function UserOrders() {
   const navigate = useNavigate();

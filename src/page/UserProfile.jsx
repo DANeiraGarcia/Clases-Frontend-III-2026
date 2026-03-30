@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import styles from '../page/UserProfile.module.css';
+import styles from '../page/styles/UserProfile.module.css';
 
 function UserProfile({ user, onSignOut }) {
   const navigate = useNavigate();

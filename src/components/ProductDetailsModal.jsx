@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import styles from './ProductDetailsModal.module.css';
+import styles from './styles/ProductDetailsModal.module.css';
 
 
 // Componente modal para mostrar los detalles de un producto, prop isOpen controla si el modal esta abierto o cerrado, product es el producto a mostrar y onClose es la función para cerrar el modal

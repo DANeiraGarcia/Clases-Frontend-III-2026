@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { saveUser, loginUser } from '../utils/userStorage';
-import styles from '../page/Register.module.css';
+import styles from '../page/styles/Register.module.css';
 
 function Register({ onLogin }) {
   const navigate = useNavigate();

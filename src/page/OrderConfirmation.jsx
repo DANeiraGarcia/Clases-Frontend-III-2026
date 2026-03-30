@@ -1,4 +1,4 @@
-import styles from '../page/OrderConfirmation.module.css';
+import styles from '../page/styles/OrderConfirmation.module.css';
 import { formatCOP } from '../utils/formatCOP';
 
 function OrderConfirmation({ order, onBackHome }) {

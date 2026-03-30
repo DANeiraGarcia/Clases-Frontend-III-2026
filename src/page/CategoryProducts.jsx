@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'; // ← nuevo
 
 import ProductCard from '../components/ProductCard';
 import ProductDetailsModal from '../components/ProductDetailsModal';
-import styles from '../page/CategoryProducts.module.css';
-import productListStyles from '../page/ProductList.module.css';
+import styles from './styles/CategoryProducts.module.css';
+import productListStyles from '../page/styles/ProductList.module.css';
 import { loadProducts } from '../utils/productStorage';
 
 function CategoryProducts({ cartItems, onAddToCart }) { // ← elimina category y onBack

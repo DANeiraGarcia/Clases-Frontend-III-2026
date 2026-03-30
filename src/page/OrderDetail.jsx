@@ -1,7 +1,7 @@
 import{ useNavigate, useParams } from 'react-router-dom';
 import { loadOrders } from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
-import styles from '../page/OrderDetail.module.css';
+import styles from '../page/styles/OrderDetail.module.css';
 
 function OrderDetail() {
   const { orderId } = useParams();

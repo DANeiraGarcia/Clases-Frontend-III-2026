@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard'; // cuando tiene default el nombre del componente es el que se importa y no va en llaves
 import ProductForm from '../components/ProductForm';
-import styles from './ProductList.module.css';
+import styles from '../page/styles/ProductList.module.css';
 import { loadProducts, PRODUCTS_STORAGE_KEY } from '../utils/productStorage';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 

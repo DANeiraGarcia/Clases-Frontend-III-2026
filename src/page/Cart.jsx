@@ -1,4 +1,4 @@
-import styles from './Cart.module.css';
+import styles from '../page/styles/Cart.module.css';
 import { calculateCartSubtotal } from '../utils/calculateOrderTotals';
 import { formatCOP } from '../utils/formatCOP';
 

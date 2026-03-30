@@ -1,4 +1,4 @@
-import styles from './ProductCard.module.css';
+import styles from './styles/ProductCard.module.css';
 import { useState } from 'react';
 
 function ProductCard({ id, name, category, price, stock, image, description, rating, onDetails, onDelete, onEdit, onAddToCart, disableAddToCart = false }) {
