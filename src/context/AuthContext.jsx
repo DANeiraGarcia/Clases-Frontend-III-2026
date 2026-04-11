@@ -8,11 +8,21 @@ import {
   saveSessionUser,
 } from '../utils/authStorage';
 
+// ─── CONTEXTO ────────────────────────────────────────────────────
+// Crea el contexto de autenticación — es el "canal" por donde
+// todos los componentes pueden acceder al usuario sin pasar props.
 const AuthContext = createContext(null);
 
+// ─── PROVEEDOR ───────────────────────────────────────────────────
+// Componente que envuelve la app y provee el contexto a sus hijos.
+// Carga el usuario de la sesión activa al iniciar.
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(loadSessionUser);
 
+  // ─── REGISTRO ──────────────────────────────────────────────────
+  // Valida los datos ingresados antes de crear la cuenta.
+  // Si el correo ya existe, retorna error sin crear el usuario.
+  // Si todo es válido, crea el usuario, guarda la sesión y actualiza el estado.
   const register = ({ name, email, password }) => {
     const normalizedEmail = String(email ?? '')
       .trim()
@@ -41,6 +51,10 @@ function AuthProvider({ children }) {
     return { ok: true, user };
   };
 
+  // ─── LOGIN ─────────────────────────────────────────────────────
+  // Busca el usuario por correo y verifica la contraseña.
+  // Si las credenciales son incorrectas, retorna error.
+  // Si son válidas, guarda la sesión sin contraseña y actualiza el estado.
   const login = ({ email, password }) => {
     const user = findUserByEmail(email);
 
@@ -64,11 +78,17 @@ function AuthProvider({ children }) {
     return { ok: true, user: sessionUser };
   };
 
+  // ─── LOGOUT ────────────────────────────────────────────────────
+  // Elimina la sesión del localStorage y limpia el estado del usuario.
   const logout = () => {
     clearSessionUser();
     setCurrentUser(null);
   };
 
+  // ─── VALOR DEL CONTEXTO ────────────────────────────────────────
+  // Agrupa todo lo que los componentes hijos pueden consumir:
+  // el usuario actual, si está autenticado y las funciones de auth.
+  // useMemo evita que se recalcule si currentUser no cambió.
   const value = useMemo(
     () => ({
       currentUser,
@@ -80,6 +100,7 @@ function AuthProvider({ children }) {
     [currentUser]
   );
 
+  // Provee el valor del contexto a todos los componentes hijos.
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

@@ -1,3 +1,5 @@
+///CRUD COMPLETO PARA USUARIOS EN LOCALSTORAGE CON NORMALIZACIÓN Y VALIDACIÓN ////
+
 // Claves para identificar los datos en localStorage
 const USERS_STORAGE_KEY = 'authUsers';
 const SESSION_STORAGE_KEY = 'authSession';
@@ -118,7 +120,7 @@ export function updateUser(userId, updates) {
 
   let updatedSessionUser = null;
   const nextUsers = loadUsers().map((user) => {
-    if (user.id !== normalizedUserId) {
+    if (user.id !== normalizedUserId) {  // se compara con el ID normalizado para evitar errores por espacios o tipos
       return user;
     }
 
@@ -127,7 +129,7 @@ export function updateUser(userId, updates) {
     return updatedUser;
   });
 
-  saveUsers(nextUsers);
+  saveUsers(nextUsers); // se guarda en la lista de usuarios actualizada
 
   if (updatedSessionUser) {
     saveSessionUser(updatedSessionUser);
@@ -158,7 +160,7 @@ export function loadSessionUser() {
 }
 
 // Guarda el usuario activo en localStorage sin su contraseña.
-// Si el usuario no es válido, limpia la sesión en lugar de guardar datos inválidos.
+// Si el usuario no es válido, LIMPIA la sesión en lugar de guardar datos inválidos.
 export function saveSessionUser(user) {
   if (typeof window === 'undefined') {
     return;
