@@ -1,6 +1,11 @@
+// Claves para identificar los datos en localStorage
 const USERS_STORAGE_KEY = 'authUsers';
 const SESSION_STORAGE_KEY = 'authSession';
 
+// ─── NORMALIZACIÓN ───────────────────────────────────────────────
+// Garantiza que cada campo del usuario tenga un formato limpio y consistente.
+// El operador ?. accede a propiedades sin error si el objeto es null/undefined.
+// El operador ?? retorna el valor derecho si el izquierdo es null/undefined.
 const normalizeUser = (user) => ({
   id: String(user?.id ?? ''),
   name: String(user?.name ?? '').trim(),
@@ -14,6 +19,8 @@ const normalizeUser = (user) => ({
   postalCode: String(user?.postalCode ?? '').trim(),
 });
 
+// Versión del usuario sin contraseña — se usa para guardar la sesión activa.
+// Si no tiene id o email válido, retorna null para evitar sesiones inválidas.
 const sanitizeSessionUser = (user) => {
   const normalizedUser = normalizeUser(user);
 
@@ -32,6 +39,9 @@ const sanitizeSessionUser = (user) => {
   };
 };
 
+// ─── LECTURA GENÉRICA DEL LOCALSTORAGE ───────────────────────────
+// Lee cualquier clave del localStorage y retorna un array.
+// Si no existe, está vacío o tiene un formato inválido, retorna [].
 const readStorageArray = (storageKey) => {
   if (typeof window === 'undefined') {
     return [];
@@ -51,12 +61,17 @@ const readStorageArray = (storageKey) => {
   }
 };
 
+// ─── CRUD DE USUARIOS ────────────────────────────────────────────
+// Carga todos los usuarios del localStorage, los normaliza
+// y filtra los que tengan los campos obligatorios completos.
 export function loadUsers() {
   return readStorageArray(USERS_STORAGE_KEY)
     .map(normalizeUser)
     .filter((user) => user.id && user.name && user.email && user.password);
 }
 
+// Guarda el array completo de usuarios en localStorage,
+// normalizando cada uno antes de escribirlo.
 export function saveUsers(users) {
   if (typeof window === 'undefined') {
     return;
@@ -66,6 +81,8 @@ export function saveUsers(users) {
   window.localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(normalizedUsers));
 }
 
+// Busca un usuario por correo electrónico (insensible a mayúsculas).
+// Retorna el usuario encontrado o null si no existe.
 export function findUserByEmail(email) {
   const normalizedEmail = String(email ?? '')
     .trim()
@@ -73,6 +90,9 @@ export function findUserByEmail(email) {
   return loadUsers().find((user) => user.email === normalizedEmail) ?? null;
 }
 
+// Crea un nuevo usuario con un ID único basado en la fecha actual,
+// lo agrega al array existente y lo guarda en localStorage.
+// Retorna la versión sin contraseña para usar en sesión.
 export function createUser(userData) {
   const nextUser = normalizeUser({
     ...userData,
@@ -85,6 +105,10 @@ export function createUser(userData) {
   return sanitizeSessionUser(nextUser);
 }
 
+// Actualiza los datos de un usuario existente por su ID.
+// Conserva el ID original para evitar duplicados.
+// Si el usuario fue actualizado, también actualiza la sesión activa.
+// Retorna la versión sin contraseña o null si no se encontró.
 export function updateUser(userId, updates) {
   const normalizedUserId = String(userId ?? '').trim();
 
@@ -112,6 +136,9 @@ export function updateUser(userId, updates) {
   return updatedSessionUser;
 }
 
+// ─── GESTIÓN DE SESIÓN ───────────────────────────────────────────
+// Carga el usuario de la sesión activa desde localStorage.
+// Retorna null si no hay sesión o si los datos son inválidos.
 export function loadSessionUser() {
   if (typeof window === 'undefined') {
     return null;
@@ -130,6 +157,8 @@ export function loadSessionUser() {
   }
 }
 
+// Guarda el usuario activo en localStorage sin su contraseña.
+// Si el usuario no es válido, limpia la sesión en lugar de guardar datos inválidos.
 export function saveSessionUser(user) {
   if (typeof window === 'undefined') {
     return;
@@ -145,6 +174,7 @@ export function saveSessionUser(user) {
   window.localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sanitizedUser));
 }
 
+// Elimina la sesión activa del localStorage — equivale a cerrar sesión.
 export function clearSessionUser() {
   if (typeof window === 'undefined') {
     return;
@@ -153,4 +183,5 @@ export function clearSessionUser() {
   window.localStorage.removeItem(SESSION_STORAGE_KEY);
 }
 
+// Exporta las claves de localStorage para usarlas en otros archivos si es necesario.
 export { SESSION_STORAGE_KEY, USERS_STORAGE_KEY };
