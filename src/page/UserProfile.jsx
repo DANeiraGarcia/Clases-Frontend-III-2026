@@ -1,5 +1,10 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/UserProfile.module.css';
+import { formatCOP } from '../utils/formatCOP';
+import { loadOrdersByUserId } from '../utils/ordersStorage';
 
 function UserProfile({ user, onSignOut }) {
   const navigate = useNavigate();
