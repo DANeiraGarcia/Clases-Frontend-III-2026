@@ -43,7 +43,7 @@ function AuthProvider({ children }) {
     if (findUserByEmail(normalizedEmail)) {
       return { ok: false, error: 'Ya existe una cuenta registrada con ese correo.' };
     }
-
+     // si todo es valido se crea el usuario.
     const user = createUser({ name: name.trim(), email: normalizedEmail, password });
     saveSessionUser(user);
     setCurrentUser(user);
@@ -82,7 +82,7 @@ function AuthProvider({ children }) {
   // Elimina la sesión del localStorage y limpia el estado del usuario.
   const logout = () => {
     clearSessionUser();
-    setCurrentUser(null);
+    setCurrentUser(null); // pone la sesion por defecto en null, es decir, sin usuario.
   };
 
   // ─── VALOR DEL CONTEXTO ────────────────────────────────────────
