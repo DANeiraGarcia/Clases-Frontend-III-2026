@@ -1,0 +1,109 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.card {
+  width: min(100%, 520px);
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 18px 50px rgba(22, 30, 84, 0.16);
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--primary-dark);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.title {
+  margin: 0;
+  color: var(--gray-900);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.subtitle {
+  margin: 0.65rem 0 0;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.label {
+  color: var(--gray-900);
+  font-weight: 800;
+}
+
+.input {
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 0.8rem 0.9rem;
+  outline: none;
+  color: var(--gray-900);
+}
+
+.input:focus {
+  border-color: var(--primary);
+}
+
+.error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.primaryButton {
+  border: none;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  background: var(--primary);
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.primaryButton:hover {
+  background: var(--primary-dark);
+}
+
+.helperText {
+  margin: 1rem 0 0;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+.helperText a {
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+.helperText a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .card {
+    padding: 1.5rem;
+  }
+}
