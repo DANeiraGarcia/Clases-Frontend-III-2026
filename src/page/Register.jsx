@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
-import styles from '../styles/AuthPage.module.css';
+import styles from '../page/styles/AuthPage.module.css';
 
 function Register() {
   const [values, setValues] = useState({
@@ -46,10 +46,10 @@ function Register() {
   return (
     <section className={styles.container}>
       <div className={styles.card}>
-        <p className={styles.eyebrow}>Semana 11</p>
+        <p className={styles.eyebrow}></p>
         <h1 className={styles.title}>Crear cuenta</h1>
         <p className={styles.subtitle}>
-          Registra un usuario local para mantener sesión, proteger rutas y asociar compras a tu
+          Registra un usuario para iniciar sesión, y asociar compras a tu
           perfil.
         </p>
 

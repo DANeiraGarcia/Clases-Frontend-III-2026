@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styles from '../page/styles/Cart.module.css';
 import { calculateCartSubtotal } from '../utils/calculateOrderTotals';
 import { formatCOP } from '../utils/formatCOP';
@@ -12,6 +13,7 @@ function Cart({
 }) {
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
   const subtotal = calculateCartSubtotal(cartItems);
+  const navigate = useNavigate();
 
   if (cartItems.length === 0) {
     return (
@@ -125,8 +127,12 @@ function Cart({
             Vaciar carrito
           </button>
 
-          <button type="button" className={styles.btnCheckout} onClick={onProceedToCheckout}>
-            Proceder al checkout
+          <button
+            type="button"
+            className={styles.btnCheckout}
+            onClick={() => navigate('/checkout')}
+          >
+          Proceder al checkout
           </button>
         </aside>
       </div>

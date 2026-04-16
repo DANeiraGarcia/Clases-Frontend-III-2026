@@ -128,10 +128,10 @@ useEffect(() => {
     <section className={styles.container}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Semana 08</p>
+          <p className={styles.eyebrow}></p>
           <h1 className={styles.title}>Checkout</h1>
           <p className={styles.subtitle}>
-            Completa los datos de entrega y confirma el pedido con un flujo de compra funcional.
+            Completa los datos de entrega y confirma el pedido.
           </p>
         </div>
 

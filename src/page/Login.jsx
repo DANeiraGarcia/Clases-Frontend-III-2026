@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import useAuth from '../hooks/useAuth';
-import styles from '../styles/AuthPage.module.css';
+import styles from '../page/styles/AuthPage.module.css';
 
 function Login() {
   const [values, setValues] = useState({ email: '', password: '' });

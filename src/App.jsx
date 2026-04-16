@@ -5,17 +5,17 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import useAuth from './hooks/useAuth';
-import Cart from './pages/Cart';
-import CategoryProducts from './pages/CategoryProducts';
-import Checkout from './pages/Checkout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import OrderConfirmation from './pages/OrderConfirmation';
-import OrderDetail from './pages/OrderDetail';
-import ProductList from './pages/ProductList';
-import Register from './pages/Register';
-import UserOrders from './pages/UserOrders';
-import UserProfile from './pages/UserProfile';
+import Cart from './page/Cart';
+import CategoryProducts from './page/CategoryProducts';
+import Checkout from './page/Checkout';
+import Home from './page/Home';
+import Login from './page/Login';
+import OrderConfirmation from './page/OrderConfirmation';
+import OrderDetail from './page/OrderDetail';
+import ProductList from './page/ProductList';
+import Register from './page/Register';
+import UserOrders from './page/UserOrders';
+import UserProfile from './page/UserProfile';
 import {
   calculateOrderTotals,
   getPaymentMethodById,
