@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import OrderCard from '../components/OrderCard';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/UserOrders.module.css';
-import { loadOrders } from '../utils/ordersStorage';
+import { loadOrdersByUserId} from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
 
-function UserProfile() {
+function UserOrders() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const orders = useMemo(() => loadOrdersByUserId(currentUser?.id), [currentUser?.id]);
@@ -133,5 +133,5 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default UserOrders;
 

@@ -12,6 +12,7 @@ const normalizeOrderItem = (item) => ({
 
 const normalizeOrder = (order) => ({
   id: String(order?.id ?? ''),
+  userId: String(order?.userId ?? ''),
   createdAt: String(order?.createdAt ?? new Date().toISOString()),
   items: Array.isArray(order?.items) ? order.items.map(normalizeOrderItem) : [],
   customer: {
@@ -40,6 +41,10 @@ const normalizeOrder = (order) => ({
     total: Number(order?.totals?.total) || 0,
   },
 });
+
+export function loadOrdersByUserId(userId) {
+  return loadOrders().filter((order) => order.userId === String(userId ?? ''));
+}
 
 export function loadOrders() {
   if (typeof window === 'undefined') {

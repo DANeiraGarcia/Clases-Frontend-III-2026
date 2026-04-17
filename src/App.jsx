@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useNavigate,Navigate, Route, Routes } from 'react-router-dom';
 
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -27,13 +27,19 @@ import { saveOrder } from './utils/ordersStorage';
 import './App.css';
 
 function App() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout  } = useAuth();
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/login');
+  };
 
   const handleAddToCart = (product) => {
     if (!product || !Number.isFinite(Number(product.id))) {
@@ -157,6 +163,7 @@ function App() {
                 onUpdateQuantity={handleUpdateCartItemQuantity}
                 onRemoveItem={handleRemoveCartItem}
                 onClearCart={handleClearCart}
+                onContinueShopping={() => navigate('/')}
               />
             }
           />
@@ -182,7 +189,7 @@ function App() {
             path="/user/profile"
             element={
               <ProtectedRoute>
-                <UserProfile />
+                <UserProfile user={currentUser} onSignOut={handleSignOut} />
               </ProtectedRoute>
             }
           />

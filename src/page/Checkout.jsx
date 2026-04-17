@@ -85,6 +85,7 @@ useEffect(() => {
     }
 
     const order = onCompleteCheckout({
+      userId: user?.id ?? '',
       customer: {
         fullName: values.fullName.trim(),
         email: values.email.trim(),
