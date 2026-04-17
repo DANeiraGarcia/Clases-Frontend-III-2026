@@ -4,7 +4,7 @@ export const products = [
     name: "Laptop",
     category: "Electronics",
     rating: 4.6,
-    price: 1200,
+    price: 200000,
     stock: 5,
     image: "https://images.pexels.com/photos/29765806/pexels-photo-29765806.jpeg",
     description: "A high-performance laptop suitable for all your computing needs."
@@ -14,7 +14,7 @@ export const products = [
     name: "Smartphone",
     category: "Electronics",
     rating: 4.8,
-    price: 800,
+    price: 150000,
     stock: 5,
     image: "https://images.pexels.com/photos/11216260/pexels-photo-11216260.jpeg",
     description: "A latest model smartphone with cutting-edge features."
@@ -24,7 +24,7 @@ export const products = [
     name: "Headphones",
     category: "Electronics",
     rating: 4.4,
-    price: 150,
+    price: 50000,
     stock: 5,
     image: "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg",
     description: "Noise-cancelling headphones for an immersive audio experience."
@@ -34,7 +34,7 @@ export const products = [
     name: "Tablet",
     category: "Electronics",
     rating: 4.7,
-    price: 300,
+    price: 300000,
     stock: 5,
     image: "https://images.pexels.com/photos/6373045/pexels-photo-6373045.jpeg",
     description: "A portable tablet for entertainment and productivity."
@@ -44,7 +44,7 @@ export const products = [
     name: "Teclado",
     category: "Accesorios",
     rating: 4.8,
-    price: 150,
+    price: 85000,
     stock: 5,
     image: "https://images.pexels.com/photos/7531569/pexels-photo-7531569.jpeg",
     description: "Un teclado mecánico de alta calidad para una experiencia de escritura superior."
@@ -54,7 +54,7 @@ export const products = [
     name: "Monitor",
     category: "Monitores",
     rating: 4.8,
-    price: 200,
+    price: 200000,
     stock: 5,
     image: "https://images.pexels.com/photos/5082554/pexels-photo-5082554.jpeg",
     description: "Un monitor de alta calidad para una experiencia de visualización superior."

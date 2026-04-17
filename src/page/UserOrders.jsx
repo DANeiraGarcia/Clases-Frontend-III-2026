@@ -33,12 +33,7 @@ function UserOrders() {
     <section className={styles.container}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Semana 11</p>
           <h1 className={styles.title}>Mi cuenta</h1>
-          <p className={styles.subtitle}>
-            Esta vista centraliza la sesión autenticada y un resumen rápido de las órdenes del
-            usuario actual.
-          </p>
         </div>
 
         <div className={styles.headerActions}>
