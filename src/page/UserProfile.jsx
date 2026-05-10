@@ -16,7 +16,10 @@ function UserProfile({ user, onSignOut }) {
     }
 
     // Llamadas independientes al backend
-    axiosClient.get('/auth/me').then((res) => setProfile(res.data)).catch(() => {});
+    axiosClient
+      .get('/auth/me')
+      .then((res) => setProfile(res.data))
+      .catch(() => {});
 
     axiosClient
       .get('/orders/me')
@@ -42,11 +45,7 @@ function UserProfile({ user, onSignOut }) {
               >
                 Ver mis órdenes
               </button>
-              <button
-                type="button"
-                className={styles.secondaryButton}
-                onClick={onSignOut}
-              >
+              <button type="button" className={styles.secondaryButton} onClick={onSignOut}>
                 Cerrar sesión
               </button>
             </div>

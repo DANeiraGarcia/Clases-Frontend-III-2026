@@ -7,8 +7,6 @@ import styles from '../page/styles/OrderDetail.module.css';
 import { loadOrdersByUserId } from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
 
-
-
 function OrderDetail() {
   const navigate = useNavigate();
   const { orderId } = useParams();
@@ -175,4 +173,3 @@ function OrderDetail() {
 }
 
 export default OrderDetail;
-

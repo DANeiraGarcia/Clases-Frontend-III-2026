@@ -8,6 +8,7 @@ import styles from '../page/styles/AuthPage.module.css';
 function Register() {
   const [values, setValues] = useState({
     name: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -35,7 +36,7 @@ function Register() {
         email: values.email.trim(),
         password: values.password,
         firstName: values.name.trim(),
-        lastName: '',
+        lastName: values.lastName.trim(),
       });
       register(res.data);
       navigate('/user/profile', { replace: true });
@@ -50,8 +51,7 @@ function Register() {
         <p className={styles.eyebrow}></p>
         <h1 className={styles.title}>Crear cuenta</h1>
         <p className={styles.subtitle}>
-          Registra un usuario para iniciar sesión, y asociar compras a tu
-          perfil.
+          Registra un usuario para iniciar sesión, y asociar compras a tu perfil.
         </p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
@@ -65,6 +65,16 @@ function Register() {
               placeholder="Ejemplo: Ana Gómez"
             />
           </label>
+          <label className={styles.field}>
+  <span className={styles.label}>Apellido</span>
+  <input
+    className={styles.input}
+    name="lastName"
+    value={values.lastName}
+    onChange={handleChange}
+    placeholder="Ejemplo: Gómez"
+  />
+</label>
 
           <label className={styles.field}>
             <span className={styles.label}>Correo electrónico</span>
@@ -85,7 +95,7 @@ function Register() {
               name="password"
               value={values.password}
               onChange={handleChange}
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Mínimo 8 caracteres"
               type="password"
             />
           </label>

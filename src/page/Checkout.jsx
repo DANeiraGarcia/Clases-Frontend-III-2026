@@ -112,7 +112,8 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
       }
     } catch (err) {
       setErrors({
-        submit: err.response?.data?.message ?? err.message ?? 'Ocurrió un error al procesar la orden.',
+        submit:
+          err.response?.data?.message ?? err.message ?? 'Ocurrió un error al procesar la orden.',
       });
     }
   };
