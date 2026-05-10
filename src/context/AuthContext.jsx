@@ -1,5 +1,6 @@
 import { createContext, useMemo, useState } from 'react';
 
+import axiosClient from '../lib/axiosClient';
 import {
   clearSessionUser,
   createUser,
@@ -43,7 +44,7 @@ function AuthProvider({ children }) {
     if (findUserByEmail(normalizedEmail)) {
       return { ok: false, error: 'Ya existe una cuenta registrada con ese correo.' };
     }
-     // si todo es valido se crea el usuario.
+    // si todo es valido se crea el usuario.
     const user = createUser({ name: name.trim(), email: normalizedEmail, password });
     saveSessionUser(user);
     setCurrentUser(user);
@@ -79,10 +80,16 @@ function AuthProvider({ children }) {
   };
 
   // ─── LOGOUT ────────────────────────────────────────────────────
-  // Elimina la sesión del localStorage y limpia el estado del usuario.
-  const logout = () => {
+  // Notifica al backend el logout y luego elimina la sesión local.
+  // El interceptor agrega el token automáticamente desde localStorage.
+  const logout = async () => {
+    try {
+      await axiosClient.post('/auth/logout');
+    } catch {
+      // Si la llamada al backend falla, continúa con el logout local
+    }
     clearSessionUser();
-    setCurrentUser(null); // pone la sesion por defecto en null, es decir, sin usuario.
+    setCurrentUser(null);
   };
 
   // ─── VALOR DEL CONTEXTO ────────────────────────────────────────
