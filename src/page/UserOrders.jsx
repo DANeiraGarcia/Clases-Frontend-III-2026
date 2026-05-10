@@ -1,16 +1,34 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import OrderCard from '../components/OrderCard';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/UserOrders.module.css';
-import { loadOrdersByUserId} from '../utils/ordersStorage';
+import { loadOrdersByUserId } from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
 
 function UserOrders() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const orders = useMemo(() => loadOrdersByUserId(currentUser?.id), [currentUser?.id]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!currentUser?.id) {
+      setLoading(false);
+      return;
+    }
+
+    axiosClient
+      .get('/orders/me')
+      .then((res) => setOrders(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {
+        // Si falla, usa los órdenes locales como fallback
+        setOrders(loadOrdersByUserId(currentUser?.id));
+      })
+      .finally(() => setLoading(false));
+  }, [currentUser?.id]);
   const latestOrder = orders[0] ?? null;
 
   const profile = {

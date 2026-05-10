@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
-import{ useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/OrderDetail.module.css';
-import { loadOrders } from '../utils/ordersStorage';
+import { loadOrdersByUserId } from '../utils/ordersStorage';
 import { formatCOP } from '../utils/formatCOP';
 
 
@@ -12,12 +13,27 @@ function OrderDetail() {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const { currentUser } = useAuth();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const order = useMemo(
-    () =>
-      loadOrdersByUserId(currentUser?.id).find((savedOrder) => savedOrder.id === orderId) ?? null,
-    [currentUser?.id, orderId]
-  );
+  useEffect(() => {
+    if (!currentUser?.id) {
+      setLoading(false);
+      return;
+    }
+
+    axiosClient
+      .get(`/orders/me/${orderId}`)
+      .then((res) => setOrder(res.data || null))
+      .catch(() => {
+        // Si falla, usa los órdenes locales como fallback
+        const localOrder =
+          loadOrdersByUserId(currentUser?.id).find((savedOrder) => savedOrder.id === orderId) ??
+          null;
+        setOrder(localOrder);
+      })
+      .finally(() => setLoading(false));
+  }, [currentUser?.id, orderId]);
 
   if (!order) {
     return (
