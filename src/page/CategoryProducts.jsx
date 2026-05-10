@@ -19,7 +19,7 @@ function CategoryProducts({ cartItems, onAddToCart }) {
 
   useEffect(() => {
     axiosClient
-      .get(`/products?categoryId=${categoryName}`)
+      .get(`/products`)
       .then((res) => setProductsState(Array.isArray(res.data) ? res.data : []))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -36,7 +36,7 @@ function CategoryProducts({ cartItems, onAddToCart }) {
     const q = query.trim().toLowerCase();
 
     return productsState.filter((product) => {
-      if (product.category !== categoryName) return false; // ← usa categoryName
+      if (product.categoryName !== categoryName) return false; // ← usa categoryName
       if (!q) return true;
 
       return String(product.name ?? '')
@@ -85,8 +85,8 @@ function CategoryProducts({ cartItems, onAddToCart }) {
         <div className={productListStyles.grid}>
           {filteredProducts.map((product) => (
             <ProductCard
-              key={product.id}
-              id={product.id}
+              key={product.productId}
+              id={product.productId}
               name={product.name}
               category={product.category}
               rating={product.rating}
