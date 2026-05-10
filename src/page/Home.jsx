@@ -1,13 +1,23 @@
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // agrega useNavigate
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import axiosClient from '../lib/axiosClient';
 import homeStyles from '../page/styles/Home.module.css';
-import { loadProducts } from '../utils/productStorage';
 
 // elimina prop onOpenCategory y reempláza por useNavigate
 function Home() {
   // reemplaza onOpenCategory por useNavigate
   const navigate = useNavigate();
-  const [productsState] = useState(loadProducts);
+  const [productsState, setProductsState] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosClient
+      .get('/products')
+      .then((res) => setProductsState(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const categoryTiles = useMemo(() => {
     const bestByCategory = new Map();

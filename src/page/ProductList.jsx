@@ -1,30 +1,29 @@
 import { useEffect, useState } from 'react';
-import ProductCard from '../components/ProductCard'; // cuando tiene default el nombre del componente es el que se importa y no va en llaves
+
+import axiosClient from '../lib/axiosClient';
+import ProductCard from '../components/ProductCard';
 import ProductForm from '../components/ProductForm';
 import styles from '../page/styles/ProductList.module.css';
-import { loadProducts, PRODUCTS_STORAGE_KEY } from '../utils/productStorage';
+import { PRODUCTS_STORAGE_KEY } from '../utils/productStorage';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 
- // se importa la función para cargar los productos y la constante con el nombre de la clave de almacenamiento
+// se importa la función para cargar los productos y la constante con el nombre de la clave de almacenamiento
 
 const STORAGE_KEY = PRODUCTS_STORAGE_KEY;
 
 function ProductList() {
-  const [productsState, setProductsState] = useState(loadProducts); //productsState es el estado local que se inicializa con los productos cargados desde el almacenamiento local o los productos semilla si no hay datos almacenados
-  const [editingProduct, setEditingProduct] = useState(null); 
+  const [productsState, setProductsState] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editingProduct, setEditingProduct] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(productsState));
-    } catch (error) {
-      void error;
-    }
-  }, [productsState]);
+    axiosClient
+      .get('/products')
+      .then((res) => setProductsState(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleOpenCreate = () => {
     setEditingProduct(null);

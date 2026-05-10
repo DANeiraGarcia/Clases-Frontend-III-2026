@@ -1,20 +1,29 @@
-import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom'; // ← nuevo
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import ProductCard from '../components/ProductCard';
 import ProductDetailsModal from '../components/ProductDetailsModal';
 import styles from './styles/CategoryProducts.module.css';
 import productListStyles from '../page/styles/ProductList.module.css';
-import { loadProducts } from '../utils/productStorage';
 
-function CategoryProducts({ cartItems, onAddToCart }) { // ← elimina category y onBack
-  const { categoryName } = useParams(); // ← obtiene categoria desde la URL
-  const navigate = useNavigate();       // ← reemplaza onBack
+function CategoryProducts({ cartItems, onAddToCart }) {
+  const { categoryName } = useParams();
+  const navigate = useNavigate();
 
   const [query, setQuery] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productsState] = useState(loadProducts);
+  const [productsState, setProductsState] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosClient
+      .get(`/products?categoryId=${categoryName}`)
+      .then((res) => setProductsState(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [categoryName]);
 
   const cartQuantityByProductId = useMemo(
     () => new Map(cartItems.map((item) => [item.id, item.quantity])),
@@ -50,7 +59,7 @@ function CategoryProducts({ cartItems, onAddToCart }) { // ← elimina category 
     <section className={styles.container}>
       <header className={styles.header}>
         <button type="button" className={styles.btnBack} onClick={() => navigate('/')}>
-          Volver  {/* ← navigate('/') reemplaza onBack */}
+          Volver {/* ← navigate('/') reemplaza onBack */}
         </button>
 
         <div className={styles.headerInfo}>
