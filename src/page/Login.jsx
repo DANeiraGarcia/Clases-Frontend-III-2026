@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/AuthPage.module.css';
 
@@ -17,21 +18,23 @@ function Login() {
     setError('');
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const result = login({
-      email: values.email.trim(),
-      password: values.password,
-    });
+    try {
+      // Con Axios: lanza excepción si el servidor responde con error (4xx, 5xx)
+      // La respuesta exitosa llega directamente en res.data
+      const res = await axiosClient.post('/auth/login', {
+        email: values.email.trim(),
+        password: values.password,
+      });
+      login(res.data);
 
-    if (!result.ok) {
-      setError(result.error);
-      return;
+      const nextPath = location.state?.from || '/user/profile';
+      navigate(nextPath, { replace: true });
+    } catch (err) {
+      setError(err.response?.data?.message ?? 'Credenciales inválidas.');
     }
-
-    const nextPath = location.state?.from || '/user/profile';
-    navigate(nextPath, { replace: true });
   };
 
   return (

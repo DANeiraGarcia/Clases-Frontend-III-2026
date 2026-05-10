@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/AuthPage.module.css';
 
@@ -21,7 +22,7 @@ function Register() {
     setError('');
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (values.password !== values.confirmPassword) {
@@ -29,18 +30,18 @@ function Register() {
       return;
     }
 
-    const result = register({
-      name: values.name,
-      email: values.email,
-      password: values.password,
-    });
-
-    if (!result.ok) {
-      setError(result.error);
-      return;
+    try {
+      const res = await axiosClient.post('/auth/register', {
+        email: values.email.trim(),
+        password: values.password,
+        firstName: values.name.trim(),
+        lastName: '',
+      });
+      register(res.data);
+      navigate('/user/profile', { replace: true });
+    } catch (err) {
+      setError(err.response?.data?.message ?? 'No se pudo crear la cuenta.');
     }
-
-    navigate('/user/profile', { replace: true });
   };
 
   return (
