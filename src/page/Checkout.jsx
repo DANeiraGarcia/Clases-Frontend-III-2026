@@ -1,6 +1,7 @@
-import {useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import axiosClient from '../lib/axiosClient';
 import styles from '../page/styles/Checkout.module.css';
 import {
   calculateOrderTotals,
@@ -25,7 +26,7 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-useEffect(() => {
+  useEffect(() => {
     setValues((currentValues) => ({
       ...currentValues,
       fullName: user?.name ?? currentValues.fullName,
@@ -74,7 +75,7 @@ useEffect(() => {
     return nextErrors;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const nextErrors = validateValues();
@@ -84,24 +85,35 @@ useEffect(() => {
       return;
     }
 
-    const order = onCompleteCheckout({
-      userId: user?.id ?? '',
-      customer: {
-        fullName: values.fullName.trim(),
-        email: values.email.trim(),
-        phone: values.phone.trim(),
-        address: values.address.trim(),
-        city: values.city.trim(),
-        postalCode: values.postalCode.trim(),
-      },
-      shippingMethodId: values.shippingMethod,
-      paymentMethodId: values.paymentMethod,
-    });
+    try {
+      // Cuando el backend esté disponible, aquí se harían dos llamadas:
+      // 1. Crear dirección: addrRes = await axiosClient.post('/users/me/addresses', {...})
+      // 2. Confirmar orden: orderRes = await axiosClient.post('/orders/checkout', {...})
+      // Por ahora, se mantiene la lógica local
 
-    if (order) {
-      navigate('/order-confirmation');
-    } else {
-      navigate('/cart');
+      const order = onCompleteCheckout({
+        userId: user?.id ?? '',
+        customer: {
+          fullName: values.fullName.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+          address: values.address.trim(),
+          city: values.city.trim(),
+          postalCode: values.postalCode.trim(),
+        },
+        shippingMethodId: values.shippingMethod,
+        paymentMethodId: values.paymentMethod,
+      });
+
+      if (order) {
+        navigate('/order-confirmation');
+      } else {
+        navigate('/cart');
+      }
+    } catch (err) {
+      setErrors({
+        submit: err.response?.data?.message ?? err.message ?? 'Ocurrió un error al procesar la orden.',
+      });
     }
   };
 
@@ -131,9 +143,7 @@ useEffect(() => {
         <div>
           <p className={styles.eyebrow}></p>
           <h1 className={styles.title}>Checkout</h1>
-          <p className={styles.subtitle}>
-            Completa los datos de entrega y confirma el pedido.
-          </p>
+          <p className={styles.subtitle}>Completa los datos de entrega y confirma el pedido.</p>
         </div>
 
         <button type="button" className={styles.secondaryButton} onClick={() => navigate('/cart')}>
