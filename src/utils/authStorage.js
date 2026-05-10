@@ -11,6 +11,9 @@ const SESSION_STORAGE_KEY = 'authSession';
 const normalizeUser = (user) => ({
   id: String(user?.id ?? ''),
   name: String(user?.name ?? '').trim(),
+  firstName: String(user?.firstName ?? '').trim(),  
+  lastName: String(user?.lastName ?? '').trim(),    
+  token: String(user?.token ?? '').trim(),          
   email: String(user?.email ?? '')
     .trim()
     .toLowerCase(),
@@ -33,6 +36,9 @@ const sanitizeSessionUser = (user) => {
   return {
     id: normalizedUser.id,
     name: normalizedUser.name,
+    firstName: normalizedUser.firstName,  
+    lastName: normalizedUser.lastName,    
+    token: normalizedUser.token,
     email: normalizedUser.email,
     phone: normalizedUser.phone,
     address: normalizedUser.address,
