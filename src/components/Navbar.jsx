@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth';
 import logo from '../assets/react.svg';
 
 function Navbar({ user, onSignOut, cartItemCount = 0 }) {
-  const userLabel = user?.name ?? 'Invitado';
+  const userLabel = user?.firstName ?? user?.name ?? 'Invitado';
   const isLoggedIn = Boolean(user);
   const navigate = useNavigate();
   const location = useLocation();
