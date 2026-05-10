@@ -3,7 +3,7 @@ import axios from 'axios';
 import { API_URL } from '../config';
 
 // Clave usada en localStorage para guardar la sesión (debe coincidir con AuthContext)
-const SESSION_KEY = 'session';
+const SESSION_KEY = 'authSession';
 
 // Instancia de Axios preconfigurada para todas las peticiones al backend
 const axiosClient = axios.create({
