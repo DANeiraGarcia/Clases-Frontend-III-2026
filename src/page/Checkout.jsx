@@ -76,47 +76,45 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const nextErrors = validateValues();
-    setErrors(nextErrors);
+  const nextErrors = validateValues();
+  setErrors(nextErrors);
 
-    if (Object.keys(nextErrors).length > 0) {
-      return;
-    }
+  if (Object.keys(nextErrors).length > 0) return;
 
-    try {
-      // Cuando el backend esté disponible, aquí se harían dos llamadas:
-      // 1. Crear dirección: addrRes = await axiosClient.post('/users/me/addresses', {...})
-      // 2. Confirmar orden: orderRes = await axiosClient.post('/orders/checkout', {...})
-      // Por ahora, se mantiene la lógica local
+  try {
+    // 1. Crear dirección
+    const addrRes = await axiosClient.post('/api/v1/users/me/addresses', {
+      type: 'SHIPPING',
+      line1: values.address.trim(),
+      line2: null,
+      city: values.city.trim(),
+      state: null,
+      country: 'Colombia',
+      postalCode: values.postalCode.trim(),
+      isDefault: true,
+    });
+    const addressId = addrRes.data.id;
 
-      const order = onCompleteCheckout({
-        userId: user?.id ?? '',
-        customer: {
-          fullName: values.fullName.trim(),
-          email: values.email.trim(),
-          phone: values.phone.trim(),
-          address: values.address.trim(),
-          city: values.city.trim(),
-          postalCode: values.postalCode.trim(),
-        },
-        shippingMethodId: values.shippingMethod,
-        paymentMethodId: values.paymentMethod,
-      });
+    // 2. Obtener carrito
+    const cartRes = await axiosClient.get('/api/v1/cart/me');
+    const cartId = cartRes.data.id;
 
-      if (order) {
-        navigate('/order-confirmation');
-      } else {
-        navigate('/cart');
-      }
-    } catch (err) {
-      setErrors({
-        submit:
-          err.response?.data?.message ?? err.message ?? 'Ocurrió un error al procesar la orden.',
-      });
-    }
-  };
+    // 3. Checkout
+    await axiosClient.post('/api/v1/orders/checkout', {
+      cartId,
+      shippingAddressId: addressId,
+      billingAddressId: addressId,
+    });
+
+    navigate('/order-confirmation');
+  } catch (err) {
+    setErrors({
+      submit: err.response?.data?.message ?? 'Ocurrió un error al procesar la orden.',
+    });
+  }
+};
 
   if (cartItems.length === 0) {
     return (
@@ -292,6 +290,7 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
             >
               Volver
             </button>
+            {errors.submit ? <p className={styles.error}>{errors.submit}</p> : null} 
             <button type="submit" className={styles.primaryButton}>
               Confirmar compra
             </button>
