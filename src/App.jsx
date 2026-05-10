@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate,Navigate, Route, Routes } from 'react-router-dom';
+import { useNavigate, Navigate, Route, Routes } from 'react-router-dom';
 
+import axiosClient from './lib/axiosClient';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,11 +28,28 @@ import { saveOrder } from './utils/ordersStorage';
 import './App.css';
 
 function App() {
-  const { currentUser, logout  } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
+  // Cargar carrito desde el backend cuando el usuario está autenticado
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+
+    axiosClient
+      .get('/cart/me')
+      .then((res) => {
+        if (Array.isArray(res.data.items)) {
+          setCartItems(res.data.items);
+        }
+      })
+      .catch(() => {});
+  }, [currentUser]);
+
+  // Guardar carrito en localStorage
   useEffect(() => {
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
   }, [cartItems]);
