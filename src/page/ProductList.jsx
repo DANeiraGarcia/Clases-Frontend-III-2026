@@ -93,7 +93,7 @@ function ProductList() {
           <div className={styles.grid}>
             {productsState.map((product) => (
               <ProductCard
-                key={product.id}
+                key={product.productId}
                 name={product.name}
                 category={product.category}
                 price={product.price}
