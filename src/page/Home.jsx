@@ -23,7 +23,7 @@ function Home() {
     const bestByCategory = new Map();
 
     for (const product of productsState) {
-      const category = product.category ?? 'Sin categoría';
+      const category = product.categoryName ?? 'Sin categoría';
       const rating = Number(product.rating);
       const current = bestByCategory.get(category);
 
