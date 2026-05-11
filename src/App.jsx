@@ -68,27 +68,32 @@ function App() {
   };
 
   const handleAddToCart = async (product) => {
-  if (!product || !Number.isFinite(Number(product.productId ?? product.id))) {
+    console.log('producto recibido:', product);
+  if (!product) {
     return;
   }
 
   if (currentUser) {
     try {
+      await axiosClient.post('/cart/items', {  // ← falta este POST
+        productId: product.id,
+        quantity: 1,
+      });
       const res = await axiosClient.get('/cart/me');
-if (Array.isArray(res.data.items)) {
-  const mappedItems = res.data.items.map((item) => ({
-    id: item.productId,
-    name: item.name,
-    price: item.unitPrice,
-    stock: item.productStock,
-    image: item.image,
-    quantity: item.quantity,
-  }));
-  setCartItems(mappedItems);
+      if (Array.isArray(res.data.items)) {
+        const mappedItems = res.data.items.map((item) => ({
+          id: item.productId,
+          name: item.name,
+          price: item.unitPrice,
+          stock: item.productStock,
+          image: item.image,
+          quantity: item.quantity,
+        }));
+        setCartItems(mappedItems);
+      }
+    } catch (err) {
+  console.error('error al agregar:', err.response?.data);
 }
-    } catch {
-      // si falla el backend usa lógica local
-    }
     return;
   }
 

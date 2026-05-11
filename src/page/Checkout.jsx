@@ -102,13 +102,14 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
     const cartId = cartRes.data.id;
 
     // 3. Checkout
-    await axiosClient.post('/orders/checkout', {
-      cartId,
-      shippingAddressId: addressId,
-      billingAddressId: addressId,
-    });
+    const orderRes = await axiosClient.post('/orders/checkout', {
+  cartId,
+  shippingAddressId: addressId,
+  billingAddressId: addressId,
+});
 
-    navigate('/order-confirmation');
+setCartItems([]);
+navigate('/order-confirmation', { state: { order: orderRes.data } });
   } catch (err) {
     setErrors({
       submit: err.response?.data?.message ?? 'Ocurrió un error al procesar la orden.',

@@ -91,7 +91,7 @@ function CategoryProducts({ cartItems, onAddToCart }) {
               category={product.category}
               rating={product.rating}
               price={product.price}
-              stock={product.stock}
+              stock={product.stockQty}
               image={product.image}
               description={product.description}
               onAddToCart={onAddToCart}
