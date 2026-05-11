@@ -107,8 +107,7 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
   shippingAddressId: addressId,
   billingAddressId: addressId,
 });
-
-setCartItems([]);
+onCompleteCheckout?.({});
 navigate('/order-confirmation', { state: { order: orderRes.data } });
   } catch (err) {
     setErrors({

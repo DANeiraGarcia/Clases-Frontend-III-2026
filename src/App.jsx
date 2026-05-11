@@ -215,6 +215,7 @@ function App() {
                   cartItems={cartItems}
                   user={currentUser}
                   onCompleteCheckout={handleCompleteCheckout}
+                  onOrderComplete={handleClearCart}
                 />
               </ProtectedRoute>
             }

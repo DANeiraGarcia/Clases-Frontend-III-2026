@@ -21,7 +21,7 @@ function OrderDetail() {
     }
 
     axiosClient
-      .get(`/orders/me/${orderId}`)
+      .get(`/orders/${orderId}`)
       .then((res) => setOrder(res.data || null))
       .catch(() => {
         // Si falla, usa los órdenes locales como fallback
@@ -37,7 +37,7 @@ function OrderDetail() {
     return (
       <section className={styles.container}>
         <div className={styles.emptyState}>
-          <p className={styles.eyebrow}>Semana 11</p>
+          <p className={styles.eyebrow}>Historial</p>
           <h1 className={styles.title}>Orden no encontrada</h1>
           <p className={styles.subtitle}>
             El identificador solicitado no pertenece al usuario autenticado o ya no está disponible
@@ -69,7 +69,7 @@ function OrderDetail() {
     <section className={styles.container}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>Semana 11</p>
+          <p className={styles.eyebrow}></p>
           <h1 className={styles.title}>Detalle de orden</h1>
           <p className={styles.subtitle}>
             Consulta el pedido completo, con los datos del cliente, envio, pago y totales.
@@ -93,40 +93,34 @@ function OrderDetail() {
           </button>
         </div>
       </header>
-
-      <div className={styles.summaryGrid}>
-        <div className={styles.summaryCard}>
-          <span className={styles.label}>Orden</span>
-          <strong>{order.id}</strong>
-        </div>
-        <div className={styles.summaryCard}>
-          <span className={styles.label}>Fecha</span>
-          <strong>{formattedDate}</strong>
-        </div>
-        <div className={styles.summaryCard}>
-          <span className={styles.label}>Envio</span>
-          <strong>{order.shippingMethod.label}</strong>
-        </div>
-        <div className={styles.summaryCard}>
-          <span className={styles.label}>Pago</span>
-          <strong>{order.paymentMethod.label}</strong>
-        </div>
+     <div className={styles.summaryGrid}>
+      <div className={styles.summaryCard}>
+       <span className={styles.label}>Orden</span>
+       <strong>{order.orderNumber}</strong>
       </div>
+      <div className={styles.summaryCard}>
+        <span className={styles.label}>Fecha</span>
+        <strong>{formattedDate}</strong>
+     </div>
+     <div className={styles.summaryCard}>
+      <span className={styles.label}>Envio</span>
+      <strong>{order.status ?? 'N/A'}</strong>
+    </div>
+    <div className={styles.summaryCard}>
+     <span className={styles.label}>Pago</span>
+     <strong>{'N/A'}</strong>
+    </div>
+    </div>
 
       <div className={styles.layout}>
-        <section className={styles.card}>
-          <h2 className={styles.sectionTitle}>Cliente</h2>
-          <div className={styles.infoList}>
-            <p>
-              <strong>{order.customer.fullName}</strong>
-            </p>
-            <p>{order.customer.email}</p>
-            <p>{order.customer.phone}</p>
-            <p>{order.customer.address}</p>
-            <p>
-              {order.customer.city} - {order.customer.postalCode}
-            </p>
-          </div>
+  <section className={styles.card}>
+    <h2 className={styles.sectionTitle}>Cliente</h2>
+    <div className={styles.infoList}>
+      <p>
+        <strong>{order.userFullName}</strong>
+      </p>
+      <p>{order.userEmail}</p>
+    </div>
         </section>
 
         <section className={styles.card}>
@@ -157,13 +151,11 @@ function OrderDetail() {
         <div className={styles.itemList}>
           {order.items.map((item) => (
             <article key={`${order.id}-${item.id}`} className={styles.item}>
-              <img className={styles.itemImage} src={item.image} alt={item.name} />
-              <div className={styles.itemContent}>
-                <h3 className={styles.itemName}>{item.name}</h3>
-                <p className={styles.itemMeta}>Categoria: {item.category}</p>
-                <p className={styles.itemMeta}>Cantidad: {item.quantity}</p>
-              </div>
-              <strong className={styles.itemPrice}>{formatCOP(item.price * item.quantity)}</strong>
+              <img className={styles.itemImage} src={item.image} alt={item.productName} />
+              <h3 className={styles.itemName}>{item.productName}</h3>
+              <p className={styles.itemMeta}>SKU: {item.sku}</p>
+              <p className={styles.itemMeta}>Cantidad: {item.quantity}</p>
+              <strong className={styles.itemPrice}>{formatCOP(item.lineTotal)}</strong>
             </article>
           ))}
         </div>
