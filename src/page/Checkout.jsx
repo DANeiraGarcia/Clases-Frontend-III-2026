@@ -85,12 +85,12 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
 
   try {
     // 1. Crear dirección
-    const addrRes = await axiosClient.post('/api/v1/users/me/addresses', {
+    const addrRes = await axiosClient.post('/users/me/addresses', {
       type: 'SHIPPING',
       line1: values.address.trim(),
       line2: null,
       city: values.city.trim(),
-      state: null,
+      state: values.city.trim(),
       country: 'Colombia',
       postalCode: values.postalCode.trim(),
       isDefault: true,
@@ -98,11 +98,11 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
     const addressId = addrRes.data.id;
 
     // 2. Obtener carrito
-    const cartRes = await axiosClient.get('/api/v1/cart/me');
+    const cartRes = await axiosClient.get('/cart/me');
     const cartId = cartRes.data.id;
 
     // 3. Checkout
-    await axiosClient.post('/api/v1/orders/checkout', {
+    await axiosClient.post('/orders/checkout', {
       cartId,
       shippingAddressId: addressId,
       billingAddressId: addressId,

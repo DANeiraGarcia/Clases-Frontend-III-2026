@@ -42,10 +42,18 @@ function App() {
     axiosClient
       .get('/cart/me')
       .then((res) => {
-        if (Array.isArray(res.data.items)) {
-          setCartItems(res.data.items);
-        }
-      })
+  if (Array.isArray(res.data.items)) {
+    const mappedItems = res.data.items.map((item) => ({
+      id: item.productId,
+      name: item.name,
+      price: item.unitPrice,
+      stock: item.productStock,
+      image: item.image,
+      quantity: item.quantity,
+    }));
+    setCartItems(mappedItems);
+  }
+})
       .catch(() => {});
   }, [currentUser]);
 
@@ -59,46 +67,55 @@ function App() {
     navigate('/login');
   };
 
-  const handleAddToCart = (product) => {
-    if (!product || !Number.isFinite(Number(product.id))) {
-      return;
+  const handleAddToCart = async (product) => {
+  if (!product || !Number.isFinite(Number(product.productId ?? product.id))) {
+    return;
+  }
+
+  if (currentUser) {
+    try {
+      const res = await axiosClient.get('/cart/me');
+if (Array.isArray(res.data.items)) {
+  const mappedItems = res.data.items.map((item) => ({
+    id: item.productId,
+    name: item.name,
+    price: item.unitPrice,
+    stock: item.productStock,
+    image: item.image,
+    quantity: item.quantity,
+  }));
+  setCartItems(mappedItems);
+}
+    } catch {
+      // si falla el backend usa lógica local
+    }
+    return;
+  }
+
+  // lógica local para invitados
+  setCartItems((currentItems) => {
+    const existingItem = currentItems.find((item) => item.id === product.id);
+    const stock = Number.isFinite(Number(product.stock)) && Number(product.stock) > 0
+      ? Number(product.stock) : 1;
+
+    if (!existingItem) {
+      return [...currentItems, {
+        id: Number(product.id),
+        name: product.name,
+        category: product.category,
+        price: Number(product.price) || 0,
+        stock,
+        image: product.image,
+        quantity: 1,
+      }];
     }
 
-    setCartItems((currentItems) => {
-      const existingItem = currentItems.find((item) => item.id === product.id);
-      const stock =
-        Number.isFinite(Number(product.stock)) && Number(product.stock) > 0
-          ? Number(product.stock)
-          : 1;
-
-      if (!existingItem) {
-        return [
-          ...currentItems,
-          {
-            id: Number(product.id),
-            name: product.name,
-            category: product.category,
-            price: Number(product.price) || 0,
-            stock,
-            image: product.image,
-            quantity: 1,
-          },
-        ];
-      }
-
-      return currentItems.map((item) => {
-        if (item.id !== product.id) {
-          return item;
-        }
-
-        return {
-          ...item,
-          stock,
-          quantity: Math.min(item.quantity + 1, stock),
-        };
-      });
+    return currentItems.map((item) => {
+      if (item.id !== product.id) return item;
+      return { ...item, stock, quantity: Math.min(item.quantity + 1, stock) };
     });
-  };
+  });
+};
 
   const handleUpdateCartItemQuantity = (productId, nextQuantity) => {
     setCartItems((currentItems) =>

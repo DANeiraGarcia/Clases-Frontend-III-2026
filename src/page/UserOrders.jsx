@@ -119,11 +119,11 @@ function UserOrders() {
 
           {latestOrder ? (
             <div className={styles.latestOrder}>
-              <p className={styles.latestOrderText}>
-                Tu compra mas reciente fue enviada con{' '}
-                <strong>{latestOrder.shippingMethod.label}</strong> y pagada con{' '}
-                <strong>{latestOrder.paymentMethod.label}</strong>.
-              </p>
+            <p className={styles.latestOrderText}>
+             Tu compra mas reciente fue enviada con{' '}
+             <strong>{latestOrder?.shippingMethod?.label ?? 'N/A'}</strong> y pagada con{' '}
+             <strong>{latestOrder?.paymentMethod?.label ?? 'N/A'}</strong>.
+             </p>
               <button
                 type="button"
                 className={styles.secondaryButton}
