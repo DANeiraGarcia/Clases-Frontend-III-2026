@@ -1,5 +1,4 @@
 import { createContext, useMemo, useState } from 'react';
-
 import axiosClient from '../lib/axiosClient';
 import {
   clearSessionUser,
@@ -9,18 +8,18 @@ import {
   saveSessionUser,
 } from '../utils/authStorage';
 
-// ─── CONTEXTO ────────────────────────────────────────────────────
+// ─── CONTEXTO 
 // Crea el contexto de autenticación — es el "canal" por donde
 // todos los componentes pueden acceder al usuario sin pasar props.
 const AuthContext = createContext(null);
 
-// ─── PROVEEDOR ───────────────────────────────────────────────────
+// ─── PROVEEDOR 
 // Componente que envuelve la app y provee el contexto a sus hijos.
 // Carga el usuario de la sesión activa al iniciar.
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(loadSessionUser);
 
-  // ─── REGISTRO ──────────────────────────────────────────────────
+  // REGISTRO 
   // Valida los datos ingresados antes de crear la cuenta.
   // Si el correo ya existe, retorna error sin crear el usuario.
   // Si todo es válido, crea el usuario, guarda la sesión y actualiza el estado.
@@ -31,7 +30,7 @@ function AuthProvider({ children }) {
   setCurrentUser(sessionUser);
 };
 
-  // ─── LOGIN ─────────────────────────────────────────────────────
+  //  LOGIN 
   // Busca el usuario por correo y verifica la contraseña.
   // Si las credenciales son incorrectas, retorna error.
   // Si son válidas, guarda la sesión sin contraseña y actualiza el estado.
@@ -42,7 +41,8 @@ function AuthProvider({ children }) {
   setCurrentUser(sessionUser);
 };
 
-  // ─── LOGOUT ────────────────────────────────────────────────────
+
+  // LOGOUT 
   // Notifica al backend el logout y luego elimina la sesión local.
   // El interceptor agrega el token automáticamente desde localStorage.
   const logout = async () => {

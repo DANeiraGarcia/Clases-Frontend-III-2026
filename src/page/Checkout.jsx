@@ -106,6 +106,7 @@ function Checkout({ cartItems, user, onBack, onCompleteCheckout }) {
   cartId,
   shippingAddressId: addressId,
   billingAddressId: addressId,
+  paymentMethod: values.paymentMethod,
 });
 onCompleteCheckout?.({});
 navigate('/order-confirmation', { state: { order: orderRes.data } });
