@@ -23,9 +23,13 @@ function AuthProvider({ children }) {
   // Valida los datos ingresados antes de crear la cuenta.
   // Si el correo ya existe, retorna error sin crear el usuario.
   // Si todo es válido, crea el usuario, guarda la sesión y actualiza el estado.
-  const register = (backendResponse) => {
+ const register = (backendResponse) => {
   const { sessionToken, user } = backendResponse;
-  const sessionUser = { ...user, token: sessionToken };
+  const sessionUser = { 
+    ...user, 
+    token: sessionToken,
+    name: user.fullName,
+  };
   saveSessionUser(sessionUser);
   setCurrentUser(sessionUser);
 };
@@ -34,9 +38,13 @@ function AuthProvider({ children }) {
   // Busca el usuario por correo y verifica la contraseña.
   // Si las credenciales son incorrectas, retorna error.
   // Si son válidas, guarda la sesión sin contraseña y actualiza el estado.
-  const login = (backendResponse) => {
+const login = async (backendResponse) => {
   const { sessionToken, user } = backendResponse;
-  const sessionUser = { ...user, token: sessionToken };
+  const sessionUser = { 
+    ...user, 
+    token: sessionToken,
+    name: user.fullName,
+  };
   saveSessionUser(sessionUser);
   setCurrentUser(sessionUser);
 };
