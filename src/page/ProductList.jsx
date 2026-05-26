@@ -35,36 +35,64 @@ function ProductList() {
     setIsFormOpen(false);
   };
 
-  const handleAddProduct = (product) => {
-    setProductsState((prev) => {
-      const maxId = prev.reduce((acc, item) => Math.max(acc, item.id), 0);
-      const nextId = maxId + 1;
-
-      return [...prev, { ...product, id: nextId }];
+  const handleAddProduct = async (product) => {
+  try {
+    const res = await axiosClient.post('/products', {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stockQty: product.stock,
+      image: product.image,
+      rating: product.rating,
+      categoryId: 2,
+      isActive: true,
     });
-
+    console.log('Respuesta del backend:', res.data);
+    setProductsState((prev) => [...prev, res.data]);
     handleCloseForm();
-  };
+  } catch (err) {
+    console.error('Error al agregar producto', err);
+  }
+};
 
-  const handleDeleteProduct = (id) => {
-    setProductsState((prev) => prev.filter((product) => product.id !== id));
-
-    if (editingProduct?.id === id) {
-      handleCloseForm();
-    }
-  };
+  const handleDeleteProduct = async (productId) => {
+  console.log('Eliminando:', productId);
+  try {
+    await axiosClient.delete(`/products/${productId}`);
+    setProductsState((prev) => prev.filter((p) => p.productId !== productId));
+    if (editingProduct?.productId === productId) handleCloseForm();
+  } catch (err) {
+    console.error('Error al eliminar producto', err);
+  }
+};
 
   const handleEditStart = (product) => {
     setEditingProduct(product);
     setIsFormOpen(true);
   };
 
-  const handleEditSubmit = (updatedProduct) => {
+  const handleEditSubmit = async (updatedProduct) => {
+    console.log('Editando:', updatedProduct);
+  try {
+    const res = await axiosClient.put(`/products/${updatedProduct.productId}`, {
+      name: updatedProduct.name,
+      description: updatedProduct.description,
+      price: updatedProduct.price,
+      stockQty: updatedProduct.stock,
+      image: updatedProduct.image,
+      rating: updatedProduct.rating,
+      sku: updatedProduct.sku,
+      categoryId: 2,
+      isActive: true,
+    });
     setProductsState((prev) =>
-      prev.map((product) => (product.id === updatedProduct.id ? updatedProduct : product))
+      prev.map((p) => (p.productId === updatedProduct.productId ? res.data : p))
     );
     handleCloseForm();
-  };
+  } catch (err) {
+    console.error('Error al editar producto', err);
+  }
+};
 
   return (
     <div className={styles.container}>
@@ -95,13 +123,13 @@ function ProductList() {
               <ProductCard
                 key={product.productId}
                 name={product.name}
-                category={product.category}
+                category={product.categoryName}
                 price={product.price}
                 rating={product.rating}
-                stock={product.stock}
+                stock={product.stockQty}
                 image={product.image}
                 description={product.description}
-                onDelete={() => handleDeleteProduct(product.id)}
+                onDelete={() => handleDeleteProduct(product.productId)}
                 onEdit={() => handleEditStart(product)}
               />
             ))}
