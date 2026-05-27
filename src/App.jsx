@@ -31,37 +31,15 @@ function App() {
   const { currentUser, logout } = useAuth();
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
-  const localItemsBeforeLogin = useRef([]);
   const navigate = useNavigate();
 
-// 1. Captura items locales SIEMPRE que cambien, mientras no hay sesión
-useEffect(() => {
-  if (!currentUser) {
-    localItemsBeforeLogin.current = [...cartItems];
-  }
-}, [cartItems, currentUser]);
+
 
 // 2. Merge cuando el usuario se loguea
 useEffect(() => {
   if (!currentUser) return;
 
-  const mergeAndLoad = async () => {
-    const localItems = localItemsBeforeLogin.current;
-
-    if (localItems.length > 0) {
-      for (const item of localItems) {
-        try {
-          await axiosClient.post('/cart/items', {
-            productId: item.id,
-            quantity: item.quantity,
-          });
-        } catch {
-          // si un item falla, continúa
-        }
-      }
-      localItemsBeforeLogin.current = []; // limpiar después del merge
-    }
-
+  const loadCart = async () => {
     try {
       const res = await axiosClient.get('/cart/me');
       if (Array.isArray(res.data.items)) {
@@ -78,7 +56,7 @@ useEffect(() => {
     } catch {}
   };
 
-  mergeAndLoad();
+  loadCart();
 }, [currentUser]);
 
   const handleAddToCart = async (product) => {
@@ -155,9 +133,17 @@ useEffect(() => {
     );
   };
 
-  const handleRemoveCartItem = (productId) => {
+ const handleRemoveCartItem = async (productId) => {
+  try {
+    if (currentUser) {
+      await axiosClient.delete(`/cart/items/${productId}`);
+    }
     setCartItems((currentItems) => currentItems.filter((item) => item.id !== productId));
-  };
+  } catch (err) {
+    console.error('Error al eliminar item:', err);
+  }
+};
+
 
   const handleClearCart = () => {
     setCartItems([]);
@@ -190,8 +176,15 @@ useEffect(() => {
     setLatestOrder(null);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+  try {
+    if (currentUser) {
+      await axiosClient.delete('/cart/items');
+    }
+  } catch {}
   logout();
+  setCartItems([]);
+  window.localStorage.removeItem(CART_STORAGE_KEY);
   navigate('/login');
 };
 
