@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo,useRef, useState } from 'react';
 import { useNavigate, Navigate, Route, Routes } from 'react-router-dom';
 
 import axiosClient from './lib/axiosClient';
@@ -31,41 +31,55 @@ function App() {
   const { currentUser, logout } = useAuth();
   const [cartItems, setCartItems] = useState(loadCartItems);
   const [latestOrder, setLatestOrder] = useState(null);
+  const localItemsBeforeLogin = useRef([]);
   const navigate = useNavigate();
 
-  // Cargar carrito desde el backend cuando el usuario está autenticado
-  useEffect(() => {
-    if (!currentUser) {
-      return;
+// 1. Captura items locales SIEMPRE que cambien, mientras no hay sesión
+useEffect(() => {
+  if (!currentUser) {
+    localItemsBeforeLogin.current = [...cartItems];
+  }
+}, [cartItems, currentUser]);
+
+// 2. Merge cuando el usuario se loguea
+useEffect(() => {
+  if (!currentUser) return;
+
+  const mergeAndLoad = async () => {
+    const localItems = localItemsBeforeLogin.current;
+
+    if (localItems.length > 0) {
+      for (const item of localItems) {
+        try {
+          await axiosClient.post('/cart/items', {
+            productId: item.id,
+            quantity: item.quantity,
+          });
+        } catch {
+          // si un item falla, continúa
+        }
+      }
+      localItemsBeforeLogin.current = []; // limpiar después del merge
     }
 
-    axiosClient
-      .get('/cart/me')
-      .then((res) => {
-  if (Array.isArray(res.data.items)) {
-    const mappedItems = res.data.items.map((item) => ({
-      id: item.productId,
-      name: item.name,
-      price: item.unitPrice,
-      stock: item.productStock,
-      image: item.image,
-      quantity: item.quantity,
-    }));
-    setCartItems(mappedItems);
-  }
-})
-      .catch(() => {});
-  }, [currentUser]);
-
-  // Guardar carrito en localStorage
-  useEffect(() => {
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
-  }, [cartItems]);
-
-  const handleSignOut = () => {
-    logout();
-    navigate('/login');
+    try {
+      const res = await axiosClient.get('/cart/me');
+      if (Array.isArray(res.data.items)) {
+        const mappedItems = res.data.items.map((item) => ({
+          id: item.productId,
+          name: item.name,
+          price: item.unitPrice,
+          stock: item.productStock,
+          image: item.image,
+          quantity: item.quantity,
+        }));
+        setCartItems(mappedItems);
+      }
+    } catch {}
   };
+
+  mergeAndLoad();
+}, [currentUser]);
 
   const handleAddToCart = async (product) => {
     console.log('producto recibido:', product);
@@ -176,6 +190,11 @@ function App() {
     setLatestOrder(null);
   };
 
+  const handleSignOut = () => {
+  logout();
+  navigate('/login');
+};
+
   const cartItemCount = useMemo(
     () => cartItems.reduce((total, item) => total + item.quantity, 0),
     [cartItems]
@@ -194,10 +213,18 @@ function App() {
             path="/category/:categoryName"
             element={<CategoryProducts cartItems={cartItems} onAddToCart={handleAddToCart} />}
           />
-          <Route path="/products" element={<ProductList />} />
+          <Route path="/products" 
+          element={
+            //<ProtectedRoute>
+            <ProductList />
+            //</ProtectedRoute>
+          } 
+            />
+
           <Route
             path="/cart"
             element={
+               //<ProtectedRoute>
               <Cart
                 cartItems={cartItems}
                 onUpdateQuantity={handleUpdateCartItemQuantity}
@@ -205,6 +232,7 @@ function App() {
                 onClearCart={handleClearCart}
                 onContinueShopping={() => navigate('/')}
               />
+              //</ProtectedRoute>
             }
           />
           <Route

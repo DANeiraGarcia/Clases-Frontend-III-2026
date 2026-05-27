@@ -34,7 +34,7 @@ function ProductList() {
     setEditingProduct(null);
     setIsFormOpen(false);
   };
-
+// agregar producto al carro tipo admin
   const handleAddProduct = async (product) => {
   try {
     const res = await axiosClient.post('/products', {

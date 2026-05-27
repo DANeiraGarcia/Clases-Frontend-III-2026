@@ -5,14 +5,14 @@ import axiosClient from '../lib/axiosClient';
 import useAuth from '../hooks/useAuth';
 import styles from '../page/styles/AuthPage.module.css';
 
-function Register() {
+ function Register() {
   const [values, setValues] = useState({
     name: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
-  });
+  }); 
   const [error, setError] = useState('');
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -21,17 +21,17 @@ function Register() {
     const { name, value } = event.target;
     setValues((currentValues) => ({ ...currentValues, [name]: value }));
     setError('');
-  };
+  }; 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (values.password !== values.confirmPassword) {
+// estas son las validaciones minimas para registro antes de enviar a un backend.
+   if (values.password !== values.confirmPassword) {
       setError('Las contraseñas no coinciden.');
       return;
-    }
-
-    try {
+    } 
+      
+     try {
       const res = await axiosClient.post('/auth/register', {
         email: values.email.trim(),
         password: values.password,
@@ -43,7 +43,7 @@ function Register() {
     } catch (err) {
       setError(err.response?.data?.message ?? 'No se pudo crear la cuenta.');
     }
-  };
+  }; 
 
   return (
     <section className={styles.container}>

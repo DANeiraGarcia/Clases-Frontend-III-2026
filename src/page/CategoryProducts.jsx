@@ -36,7 +36,7 @@ function CategoryProducts({ cartItems, onAddToCart }) {
     const q = query.trim().toLowerCase();
 
     return productsState.filter((product) => {
-      if (product.categoryName !== categoryName) return false; // ← usa categoryName
+      if (product.categoryName !== categoryName) return false; 
       if (!q) return true;
 
       return String(product.name ?? '')

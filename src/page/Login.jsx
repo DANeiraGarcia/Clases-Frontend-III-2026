@@ -40,7 +40,6 @@ function Login() {
   return (
     <section className={styles.container}>
       <div className={styles.card}>
-        <p className={styles.eyebrow}>Semana 11</p>
         <h1 className={styles.title}>Iniciar sesión</h1>
         <p className={styles.subtitle}>
           Accede a tu cuenta para proteger el checkout y consultar un historial propio de órdenes.
